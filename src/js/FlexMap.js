@@ -44,7 +44,7 @@ export class FlexMap extends Map {
    * @return {TYPE}
    */
   get(key) {
-    return super.get(key)
+    return (super.get(key) === undefined ? null : super.get(key))
   }
 
   /**

@@ -1,7 +1,6 @@
 /* global runTest */
 import {FlexDate, FlexTime, FlexDateTime, FlexZonedDateTime} from '../js/FlexDate'
 import {TestCase} from 'code-altimeter-js'
-import {padLeft} from '../../../flexio-jshelpers'
 
 const assert = require('assert')
 
@@ -54,10 +53,6 @@ export class TestFlexDate extends TestCase {
 
     var time = new FlexZonedDateTime('1992-10-17T04:17:32+03:00')
     assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32+03:00', 'test tz datetime creation')
-  }
-
-  testPadLeft() {
-    assert(padLeft('123', 10, '0') === '0000000123')
   }
 }
 
