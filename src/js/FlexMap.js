@@ -8,7 +8,7 @@ export class FlexMap extends Map {
    */
   constructor(args) {
     super(args)
-    this.forEach(a => this._validate(a))
+    this.forEach((a) => this._validate(a))
   }
 
   /**
@@ -24,7 +24,7 @@ export class FlexMap extends Map {
   /**
    *
    * @param {FlexMap~forEachClb<TYPE>} callbackfn
-   * @param {?*} thisArg
+   * @param {*?} thisArg
    */
   forEach(callbackfn, thisArg) {
     super.forEach(callbackfn, thisArg)
