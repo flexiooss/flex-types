@@ -1,63 +1,55 @@
 /* global runTest */
 import {FlexDate, FlexTime, FlexDateTime, FlexZonedDateTime} from '../js/FlexDate'
 import {TestCase} from 'code-altimeter-js'
-import {padLeft} from '../../../flexio-jshelpers'
 
 const assert = require('assert')
 
 export class TestFlexDate extends TestCase {
   testDateCreation() {
-    const date = new FlexDate('1992-10-17')
+    let date = new FlexDate('1992-10-17')
     assert.strictEqual(date.toJSON(), '1992-10-17', 'test date creation')
   }
 
   testTimeCreation() {
-    const time = new FlexTime('04:17:32.527')
+    let time = new FlexTime('04:17:32.527')
     assert.strictEqual(time.toJSON(), '04:17:32.527', 'test time creation')
 
-    const time_2 = new FlexTime('04:17:32')
-    assert.strictEqual(time_2.toJSON(), '04:17:32', 'test time creation')
+    time = new FlexTime('04:17:32.527Z')
+    assert.strictEqual(time.toJSON(), '04:17:32.527', 'test time creation')
 
-    time_2.date.setMilliseconds(574)
-    assert.strictEqual(time_2.toJSON(), '04:17:32.574', 'test time creation')
+    time = new FlexTime('04:17:32')
+    assert.strictEqual(time.toJSON(), '04:17:32', 'test time creation')
+
+    time = new FlexTime('04:17:32Z')
+    assert.strictEqual(time.toJSON(), '04:17:32', 'test time creation')
   }
 
   testDateTimeCreation() {
-    var time = new FlexTime('04:17:32.527')
-    assert.strictEqual(time.toJSON(), '04:17:32.527', 'test datetime creation')
-
-    var time = new FlexDateTime('1992-12-17T04:17:32')
+    let time = new FlexDateTime('1992-12-17T04:17:32')
     assert.strictEqual(time.toJSON(), '1992-12-17T04:17:32', 'test datetime creation')
 
-    var time = new FlexDateTime('1992-10-17T04:17:32Z')
+    time = new FlexDateTime('1992-10-17T04:17:32Z')
     assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32', 'test datetime creation')
 
-    var time = new FlexDateTime('1992-10-17T04:17:32.174')
+    time = new FlexDateTime('1992-10-17T04:17:32.174')
     assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32.174', 'test datetime creation')
 
-    var time = new FlexDateTime('1992-10-17T04:17:32.174Z')
+    time = new FlexDateTime('1992-10-17T04:17:32.174Z')
     assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32.174', 'test datetime creation')
   }
 
   testTzDateTimeCreation(){
-    var time = new FlexDateTime('1992-10-17T04:17:32')
-    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32', 'test tz datetime creation')
-
-    var time = new FlexDateTime('1992-10-17T04:17:32Z')
-    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32', 'test tz datetime creation')
-
-    var time = new FlexDateTime('1992-10-17T04:17:32.174')
-    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32.174', 'test tz datetime creation')
-
-    var time = new FlexDateTime('1992-10-17T04:17:32.174Z')
-    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32.174', 'test tz datetime creation')
-
-    var time = new FlexZonedDateTime('1992-10-17T04:17:32+03:00')
+    let time = new FlexZonedDateTime('1992-10-17T04:17:32Z+03:00')
     assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32+03:00', 'test tz datetime creation')
-  }
 
-  testPadLeft() {
-    assert(padLeft('123', 10, '0') === '0000000123')
+    time = new FlexZonedDateTime('1992-10-17T04:17:32+03:00')
+    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32+03:00', 'test tz datetime creation')
+
+    time = new FlexZonedDateTime('1992-10-17T04:17:32')
+    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32+00:00', 'test tz datetime creation')
+
+    time = new FlexZonedDateTime('1992-10-17T04:17:32Z')
+    assert.strictEqual(time.toJSON(), '1992-10-17T04:17:32+00:00', 'test tz datetime creation')
   }
 }
 
