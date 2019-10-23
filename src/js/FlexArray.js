@@ -80,7 +80,7 @@ export class FlexArray extends Array {
 
   /**
    *
-   * @param {FlexArray~filter<TYPE>} callback
+   * @param {function(current: TYPE, index: number, all: this):boolean} callback
    * @return {TYPE}
    */
   find(callback) {
@@ -89,9 +89,9 @@ export class FlexArray extends Array {
 
   /**
    *
-   * @param {FlexArray~filter<TYPE>} callback
+   * @param {function(current: TYPE, index: number, all: this):boolean} callback
    * @param thisArg
-   * @return {any[]}
+   * @return {*[]}
    */
   filter(callback, thisArg) {
     return super.filter(callback, thisArg)
@@ -109,7 +109,7 @@ export class FlexArray extends Array {
   /**
    *
    * @param {Array<TYPE_OUT>} init
-   * @param {FlexArray~mapToClb<TYPE>} clb
+   * @param {function(value: TYPE, index: number, all: this):*} clb
    * @return {Array<TYPE_OUT>}
    */
   mapTo(init, clb) {
@@ -121,7 +121,7 @@ export class FlexArray extends Array {
 
   /**
    *
-   * @param {FlexArray~mapToClb<TYPE>} clb
+   * @param {function(value: TYPE, index: number, all: this):*} clb
    * @return {Array}
    */
   mapToArray(clb) {
@@ -135,15 +135,6 @@ export class FlexArray extends Array {
   toArray() {
     return this.mapToArray(v => v)
   }
-
-  /**
-   * @template TYPE
-   * @callback FlexArray~mapToClb<TYPE>
-   * @param {TYPE} v
-   * @param {string} k
-   * @param {this} a
-   * @return {*}
-   */
 
   /**
    *

@@ -23,20 +23,13 @@ export class FlexMap extends Map {
 
   /**
    *
-   * @param {FlexMap~forEachClb<TYPE>} callbackfn
+   * @param {function(value: TYPE, key: *, map: this)} callbackfn
    * @param {*?} thisArg
    */
   forEach(callbackfn, thisArg) {
     super.forEach(callbackfn, thisArg)
   }
 
-  /**
-   * @template TYPE
-   * @callback FlexMap~forEachClb
-   * @param {TYPE} value
-   * @param {*} key
-   * @param {FlexMap} map
-   */
 
   /**
    *
