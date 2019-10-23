@@ -1,6 +1,7 @@
 import { globalFlexioImport } from '@flexio-oss/global-import-registry'
 import { assertType, isNull } from '@flexio-oss/assert'
-import { FlexArray, FlexTime  } from '@flexio-oss/flex-types'
+import {FlexArray} from '../FlexArray'
+
 /**
  * @extends {FlexArray<?FlexTime>}
  */

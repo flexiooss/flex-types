@@ -1,6 +1,7 @@
-import { globalFlexioImport } from '@flexio-oss/global-import-registry'
-import { assertType, isNull } from '@flexio-oss/assert'
-import { FlexZonedDateTime, FlexArray } from '@flexio-oss/flex-types'
+import {globalFlexioImport} from '@flexio-oss/global-import-registry'
+import {assertType, isNull} from '@flexio-oss/assert'
+import {FlexArray} from '../FlexArray'
+
 /**
  * @extends {FlexArray<?FlexZonedDateTime>}
  */
@@ -11,7 +12,7 @@ class TzDateTimeArray extends FlexArray {
 
   /**
    * @param {number} index
-  * @returns {FlexZonedDateTime}
+   * @returns {FlexZonedDateTime}
    */
   get(index) {
     return this[index]
@@ -19,9 +20,10 @@ class TzDateTimeArray extends FlexArray {
 
   _validate(element) {
     if (!isNull(element)) {
-      assertType(element instanceof  globalFlexioImport.io.flexio.flex_types.FlexZonedDateTime, 'element should be a FlexZonedDateTime')
+      assertType(element instanceof globalFlexioImport.io.flexio.flex_types.FlexZonedDateTime, 'element should be a FlexZonedDateTime')
     }
   }
 
 }
-export { TzDateTimeArray }
+
+export {TzDateTimeArray}

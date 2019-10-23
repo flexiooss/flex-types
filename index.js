@@ -6,6 +6,7 @@ import {FlexDateTime, FlexZonedDateTime, FlexDate, FlexTime} from './src/js/Flex
 import {FlexMap, FlexMapBuilder} from './src/js/FlexMap'
 import {FlexArray} from './src/js/FlexArray'
 
+
 import {StringArray} from './src/js/arrays/StringArray'
 import {BooleanArray} from './src/js/arrays/BooleanArray'
 import {DateArray} from './src/js/arrays/DateArray'
@@ -17,6 +18,16 @@ import {ObjectArray} from './src/js/arrays/ObjectArray'
 import {DateTimeArray} from './src/js/arrays/DateTimeArray'
 import {TimeArray} from './src/js/arrays/TimeArray'
 import {TzDateTimeArray} from './src/js/arrays/TzDateTimeArray'
+
+
+/**
+ * @property {FlexArray} globalFlexioImport.io.flexio.flex_types.FlexArray
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.FlexArray', FlexArray)
+/**
+ * @property {FlexArray} globalFlexioImport.io.flexio.flex_types.FlexArray
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.FlexArray', FlexArray)
 
 /**
  * @property {FlexEnum} globalFlexioImport.io.flexio.flex_types.FlexEnum
@@ -58,10 +69,7 @@ deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.FlexMap', FlexMap)
  */
 deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.FlexMapBuilder', FlexMapBuilder)
 
-/**
- * @property {FlexArray} globalFlexioImport.io.flexio.flex_types.FlexArray
- */
-deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.FlexArray', FlexArray)
+
 
 /**
  * @property {StringArray} globalFlexioImport.io.flexio.flex_types.arrays.StringArray
@@ -122,6 +130,9 @@ deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.arrays.TimeArray', Tim
  * @property {TzDateTimeArray} globalFlexioImport.io.flexio.flex_types.arrays.TzDateTimeArray
  */
 deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.arrays.TzDateTimeArray', TzDateTimeArray)
+
+console.log(globalFlexioImport)
+
 
 export {FlexEnum}
 export {FlexDateTime}
