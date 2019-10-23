@@ -19,7 +19,7 @@ class TimeArray extends FlexArray {
 
   _validate(element) {
     if (!isNull(element)) {
-      assertType(element instanceof FlexTime, 'element should be a FlexTime')
+      assertType(element instanceof globalFlexioImport.io.flexio.flex_types.FlexTime, 'element should be a FlexTime')
     }
   }
 

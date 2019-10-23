@@ -23,5 +23,14 @@ class ObjectArray extends FlexArray {
     }
   }
 
+  /**
+   *
+   * @return {Array.<?object>}
+   */
+  toArray() {
+    return this.mapToArray(v => JSON.parse(JSON.stringify(v)))
+  }
+
+
 }
 export { ObjectArray }

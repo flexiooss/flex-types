@@ -1,5 +1,5 @@
 import { globalFlexioImport } from '@flexio-oss/global-import-registry'
-import { assertType, isNull } from '@flexio-oss/assert'
+import { assertType, isNull , isString} from '@flexio-oss/assert'
 import { FlexArray } from '@flexio-oss/flex-types'
 /**
  * @extends {FlexArray<?string>}

@@ -19,7 +19,7 @@ class DateArray extends FlexArray {
 
   _validate(element) {
     if (!isNull(element)) {
-      assertType(element instanceof FlexDate, 'element should be a FlexDate')
+      assertType(element instanceof  globalFlexioImport.io.flexio.flex_types.FlexDate, 'element should be a FlexDate')
     }
   }
 

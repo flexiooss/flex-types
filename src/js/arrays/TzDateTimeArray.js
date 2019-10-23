@@ -19,7 +19,7 @@ class TzDateTimeArray extends FlexArray {
 
   _validate(element) {
     if (!isNull(element)) {
-      assertType(element instanceof FlexZonedDateTime, 'element should be a FlexZonedDateTime')
+      assertType(element instanceof  globalFlexioImport.io.flexio.flex_types.FlexZonedDateTime, 'element should be a FlexZonedDateTime')
     }
   }
 
