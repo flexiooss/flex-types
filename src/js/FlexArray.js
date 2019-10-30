@@ -94,17 +94,30 @@ export class FlexArray extends Array {
    * @return {*[]}
    */
   filter(callback, thisArg) {
-    return super.filter(callback, thisArg)
+    if (this.length) {
+      return new this.constructor(...this.toArray().filter(callback, thisArg))
+    }
   }
 
   /**
-   * @template TYPE
-   * @callback FlexArray~filter<TYPE>
-   * @param {TYPE} current
-   * @param {number} index
-   * @param {this} all
-   * @return {boolean}
+   *
+   * @param {function(final: *,current: TYPE, index: number, all: this):*} callback
+   * @param initialValue
+   * @return {*[]}
    */
+  reduce(callback, initialValue){
+    return this.toArray().reduce(callback, initialValue)
+  }
+
+  /**
+   *
+   * @param {function(final: *,current: TYPE, index: number, all: this):*} callback
+   * @param initialValue
+   * @return {*[]}
+   */
+  reduceRight(callback, initialValue){
+    return this.toArray().reduceRight(callback, initialValue)
+  }
 
   /**
    *
