@@ -1,3 +1,5 @@
+import {isFunction, assertType, isUndefined} from '@flexio-oss/assert'
+
 /**
  * @template TYPE, TYPE_OUT
  */
@@ -57,9 +59,14 @@ export class FlexArray extends Array {
    *
    * @param {number} offset
    * @return {TYPE}
+   * @throws {RangeError}
    */
   get(offset) {
-    return this[offset]
+    const ret = this[offset]
+    if (isUndefined(ret)) {
+      throw  new RangeError('`offset` not allowed')
+    }
+    return ret
   }
 
   /**
@@ -91,12 +98,40 @@ export class FlexArray extends Array {
    *
    * @param {function(current: TYPE, index: number, all: this):boolean} callback
    * @param thisArg
-   * @return {*[]}
+   * @return {FlexArray<TYPE>}
    */
   filter(callback, thisArg) {
-    if (this.length) {
-      return new this.constructor(...this.toArray().filter(callback, thisArg))
+    assertType(
+      isFunction(callback),
+      'FlexArray:filter: `callback` should be a Function'
+    )
+
+    let len = this.length >>> 0
+    const res = new this.constructor()
+    let t = this
+    let c = 0
+    let i = -1
+
+    if (isUndefined(thisArg)) {
+      while (++i !== len) {
+        if (i in this) {
+          if (callback(t[i], i, t)) {
+            res.push(t[i])
+          }
+        }
+      }
+    } else {
+      while (++i !== len) {
+        if (i in this) {
+          if (callback.call(thisArg, t[i], i, t)) {
+            res.push(t[i])
+          }
+        }
+      }
     }
+
+    return res
+
   }
 
   /**
@@ -105,7 +140,7 @@ export class FlexArray extends Array {
    * @param initialValue
    * @return {*[]}
    */
-  reduce(callback, initialValue){
+  reduce(callback, initialValue) {
     return this.toArray().reduce(callback, initialValue)
   }
 
@@ -115,7 +150,7 @@ export class FlexArray extends Array {
    * @param initialValue
    * @return {*[]}
    */
-  reduceRight(callback, initialValue){
+  reduceRight(callback, initialValue) {
     return this.toArray().reduceRight(callback, initialValue)
   }
 

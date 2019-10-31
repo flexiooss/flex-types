@@ -6,17 +6,6 @@ import {FlexArray} from '../FlexArray'
  * @extends {FlexArray<?number>}
  */
 class DoubleArray extends FlexArray {
-  constructor(...args) {
-    super(...args)
-  }
-
-  /**
-   * @param {number} index
-  * @returns {number}
-   */
-  get(index) {
-    return this[index]
-  }
 
   _validate(element) {
     if (!isNull(element)) {
