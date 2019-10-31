@@ -6,17 +6,6 @@ import {FlexArray} from '../FlexArray'
  * @extends {FlexArray<?FlexDate>}
  */
 class DateArray extends FlexArray {
-  constructor(...args) {
-    super(...args)
-  }
-
-  /**
-   * @param {number} index
-  * @returns {FlexDate}
-   */
-  get(index) {
-    return this[index]
-  }
 
   _validate(element) {
     if (!isNull(element)) {

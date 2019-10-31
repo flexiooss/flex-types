@@ -6,17 +6,6 @@ import {FlexArray} from '../FlexArray'
  * @extends {FlexArray<?FlexTime>}
  */
 class TimeArray extends FlexArray {
-  constructor(...args) {
-    super(...args)
-  }
-
-  /**
-   * @param {number} index
-  * @returns {FlexTime}
-   */
-  get(index) {
-    return this[index]
-  }
 
   _validate(element) {
     if (!isNull(element)) {

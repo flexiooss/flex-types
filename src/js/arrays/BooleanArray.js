@@ -6,17 +6,6 @@ import {FlexArray} from '../FlexArray'
  * @extends {FlexArray<?boolean>}
  */
 class BooleanArray extends FlexArray {
-  constructor(...args) {
-    super(...args)
-  }
-
-  /**
-   * @param {number} index
-  * @returns {boolean}
-   */
-  get(index) {
-    return this[index]
-  }
 
   _validate(element) {
     if (!isNull(element)) {

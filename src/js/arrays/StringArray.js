@@ -6,17 +6,6 @@ import {FlexArray} from '../FlexArray'
  * @extends {FlexArray<?string>}
  */
 class StringArray extends FlexArray {
-  constructor(...args) {
-    super(...args)
-  }
-
-  /**
-   * @param {number} index
-  * @returns {string}
-   */
-  get(index) {
-    return this[index]
-  }
 
   _validate(element) {
     if (!isNull(element)) {
