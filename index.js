@@ -146,3 +146,4 @@ export {ObjectArray}
 export {DateTimeArray}
 export {TimeArray}
 export {TzDateTimeArray}
+export {TypeCheck} from './src/js/TypeCheck'

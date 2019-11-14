@@ -71,6 +71,18 @@ export class FlexArray extends Array {
 
   /**
    *
+   * @param {number} offset
+   * @param {TYPE} value
+   * @return {FlexArray.<TYPE>}
+   */
+  set(offset, value) {
+    this._validate(value)
+    this[offset] = value
+    return this
+  }
+
+  /**
+   *
    * @return {TYPE}
    */
   first() {
@@ -92,6 +104,27 @@ export class FlexArray extends Array {
    */
   find(callback) {
     return super.find(callback)
+  }
+
+  /**
+   *
+   * @param {function(value: TYPE, index: number, array: this)} callback
+   */
+  forEach(callback) {
+    return super.forEach(callback)
+  }
+
+  /**
+   *
+   * @param {number} start
+   * @param {number} deleteCount
+   * @param {...TYPE} args
+   * @return {FlexArray.<TYPE>}
+   */
+  splice(start, deleteCount, ...args) {
+    const a = this.toArray()
+    a.splice(start, deleteCount, ...args)
+    return new this.constructor(...a)
   }
 
   /**
