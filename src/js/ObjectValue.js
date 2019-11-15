@@ -562,9 +562,21 @@ export class ObjectValue {
    * @param {?ObjectValue} value
    * @return {ObjectValue}
    */
-  witObjectValueValue(key, value) {
+  withObjectValueValue(key, value) {
     const builder = ObjectValueBuilder.from(this)
     builder.objectValueValue(key, value)
+    return builder.build()
+  }
+
+  /**
+   *
+   * @param {string} key
+   * @param {ObjectValueValue} value
+   * @return {ObjectValue}
+   */
+  withValue(key, value) {
+    const builder = ObjectValueBuilder.from(this)
+    builder.value(key, value)
     return builder.build()
   }
 

@@ -16,6 +16,15 @@ export class TypeCheck {
 
   /**
    *
+   * @param {ObjectValue} inst
+   * @return {boolean}
+   */
+  static isObjectValue(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.ObjectValue
+  }
+
+  /**
+   *
    * @param {FlexArray} inst
    * @throws {TypeError}
    */
