@@ -17,6 +17,8 @@ import {ObjectArray} from './src/js/arrays/ObjectArray'
 import {DateTimeArray} from './src/js/arrays/DateTimeArray'
 import {TimeArray} from './src/js/arrays/TimeArray'
 import {TzDateTimeArray} from './src/js/arrays/TzDateTimeArray'
+import {IndexError} from './src/js/IndexError'
+import {ObjectValue, ObjectValueBuilder} from './src/js/ObjectValue'
 
 /**
  * @property {FlexArray} globalFlexioImport.io.flexio.flex_types.FlexArray
@@ -127,6 +129,21 @@ deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.arrays.TimeArray', Tim
  */
 deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.arrays.TzDateTimeArray', TzDateTimeArray)
 
+/**
+ * @property {typeof IndexError} globalFlexioImport.io.flexio.flex_types.IndexError
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.IndexError', IndexError)
+
+/**
+ * @property {ObjectValue} globalFlexioImport.io.flexio.flex_types.ObjectValue
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.ObjectValue', ObjectValue)
+
+/**
+ * @property {ObjectValueBuilder} globalFlexioImport.io.flexio.flex_types.ObjectValueBuilder
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.ObjectValueBuilder', ObjectValueBuilder)
+
 export {FlexEnum}
 export {FlexDateTime}
 export {FlexZonedDateTime}
@@ -146,4 +163,6 @@ export {ObjectArray}
 export {DateTimeArray}
 export {TimeArray}
 export {TzDateTimeArray}
+export {IndexError}
+export {ObjectValue, ObjectValueBuilder}
 export {TypeCheck} from './src/js/TypeCheck'
