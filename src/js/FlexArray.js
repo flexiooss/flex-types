@@ -1,4 +1,5 @@
-import {isFunction, assertType, isUndefined} from '@flexio-oss/assert'
+import {isFunction, assertType, isUndefined, isNumber} from '@flexio-oss/assert'
+import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 
 /**
  * @template TYPE, TYPE_OUT
@@ -9,8 +10,10 @@ export class FlexArray extends Array {
    * @param {...<TYPE>} args
    */
   constructor(...args) {
-    super(...args)
-    args.forEach(a => this._validate(a))
+    super()
+    for (const v of args) {
+      this.push(v)
+    }
   }
 
   /**
@@ -59,12 +62,12 @@ export class FlexArray extends Array {
    *
    * @param {number} offset
    * @return {TYPE}
-   * @throws {RangeError}
+   * @throws {IndexError}
    */
   get(offset) {
     const ret = this[offset]
     if (isUndefined(ret)) {
-      throw  new RangeError('`offset` not allowed')
+      throw globalFlexioImport.io.flexio.flex_types.IndexError.BAD_ARRAY_KEY(offset)
     }
     return ret
   }

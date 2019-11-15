@@ -1,16 +1,165 @@
 import {FlexMap} from './FlexMap'
 
 import {deepFreezeSeal} from '@flexio-oss/js-generator-helpers'
-import {assertType, isObject, isNull, isString, isBoolean, isNumber, isStrictArray, isArray} from '@flexio-oss/assert'
+import {assertType, isObject, isNull, isString, isBoolean, isNumber, isArray} from '@flexio-oss/assert'
 import {FlexArray} from './FlexArray'
+import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 
-const __map = Symbol('__map')
+/**
+ * @typedef {(null | string | number | boolean | ObjectValueValue[]| ObjectValueArray | ObjectValue)} ObjectValueValue
+ */
+
+/**
+ *
+ * @param {Array} a
+ * @param {Array} [ret=[]]
+ * @return {Array}
+ */
+const arrayToObject = (a, ret = []) => {
+  assertType(
+    isArray(a) && isArray(ret),
+    'arrayToObject: `a` & `ret` should be Array'
+  )
+
+  for (const val of a) {
+    if (val instanceof ObjectValue || val instanceof globalFlexioImport.io.flexio.flex_types.FlexArray) {
+      ret.push(val.toObject())
+    } else if (isArray(val)) {
+      ret.push(arrayToObject(val, ret))
+    } else {
+      ret.push(val)
+    }
+  }
+  return ret
+}
+/**
+ *
+ * @param {*} value
+ * @return {ObjectValueValue}
+ */
+const valueFromItem = (value) => {
+  if (isObject(value)) {
+    if (value instanceof ObjectValue) {
+      return value
+    }
+    return ObjectValueBuilder.fromObject(value).build()
+  } else if (isArray(value)) {
+    if (value instanceof ObjectValueArray) {
+      return value
+    }
+    let ret = new ObjectValueArray()
+
+    for (const v of value) {
+      ret.push(valueFromItem(v))
+    }
+    return ret
+  }
+  return value
+
+}
+
 /**
  *
  * @param {*} a
  * @return {boolean}
  */
-const isJsonSpec = a => isNull(a) || isString(a) || isBoolean(a) || isNumber(a) || isStrictArray(a) || a instanceof ObjectValue
+const isObjectValueValue = a => isNull(a) || isString(a) || isBoolean(a) || isNumber(a) || a instanceof ObjectValue || a instanceof ObjectValueArray
+
+/**
+ *
+ * @param {?ObjectValue} to
+ * @param {?ObjectValue} compare
+ * @return {boolean}
+ */
+const objectValueValueEquals = (to, compare) => {
+  assertType((to instanceof ObjectValue || isNull(to)) && (compare instanceof ObjectValue || isNull(compare)), '`to` & `compare` should be an instance of ObjectValue or null')
+
+  if ((isNull(to) && !isNull(compare)) || (!isNull(to) && isNull(compare))) {
+    return false
+  }
+
+  if (compare == to) {
+    return true
+  }
+
+  if (compare.size() !== to.size()) {
+    return false
+  }
+
+  for (const key of compare.propertyNames()) {
+    if (!objectValueValuePropertyEquals(to.rawValue(key), compare.rawValue(key))) {
+      return false
+    }
+  }
+  return true
+}
+
+/**
+ *
+ * @param {ObjectValueValue} to
+ * @param {ObjectValueValue} compare
+ * @return {boolean}
+ */
+const objectValueValuePropertyEquals = (to, compare) => {
+  if (compare === to) {
+    return true
+  }
+  if (to instanceof ObjectValue) {
+    if (!compare instanceof ObjectValue) {
+      return false
+    }
+
+    return to.equals(compare)
+
+  } else if (isArray(to)) {
+    if (!isArray(compare) || !objectValueValueArrayEquals(to, compare)) {
+      return false
+    }
+
+  }
+
+  return false
+}
+
+/**
+ *
+ * @param {?Array} to
+ * @param {?Array} compare
+ * @return {boolean}
+ */
+const objectValueValueArrayEquals = (to, compare) => {
+  assertType(isArray(to) && isArray(ObjectValue), '`to` & `compare` should be an Array')
+  if (compare == to) {
+    return true
+  }
+  if (to.length !== compare.length) {
+    return false
+  }
+
+  for (let i = to.length - 1; i >= 0; --i) {
+    if (!objectValueValuePropertyEquals(to[i], compare[i])) {
+      return false
+    }
+
+  }
+  return true
+}
+
+/**
+ *
+ * @param {*} v
+ * @throws {TypeError}
+ */
+const validateObjectValueValue = v => {
+  assertType(
+    isObjectValueValue(v),
+    'validateObjectValueValue: `v` should be null or string or number or boolean or Array or ObjectValue : %s',
+    typeof v
+  )
+
+}
+
+const __map = Symbol('__map')
 
 export class ObjectValue {
   /**
@@ -30,7 +179,6 @@ export class ObjectValue {
      */
     this[__map] = data
     this.__freeze()
-
   }
 
   /**
@@ -38,10 +186,10 @@ export class ObjectValue {
    * @private
    */
   __freeze() {
-    deepFreezeSeal(this)
     this[__map].forEach((v) => {
       deepFreezeSeal(v)
     })
+    deepFreezeSeal(this)
     this[__map].set = function(key) {
       throw new Error('Can\'t add property ' + key + ', map is not extensible')
     }
@@ -67,12 +215,12 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @return {(null | string | number | boolean | Array | ObjectValue)}
-   * @throws {OffsetError}
+   * @return {ObjectValueValue}
+   * @throws {IndexError}
    */
   rawValue(key) {
     if (!this.has(key)) {
-      throw new OffsetError('key `' + key + '` not in ObjectValue')
+      throw globalFlexioImport.io.flexio.flex_types.IndexError.BAD_ARRAY_KEY(key)
     }
     return this[__map].get(key)
   }
@@ -80,8 +228,8 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @param {(null | string | number | boolean | Array | ObjectValue)} [defaultValue=null]
-   * @return {(null | string | number | boolean | Array | ObjectValue)}
+   * @param {ObjectValueValue} [defaultValue=null]
+   * @return {ObjectValueValue}
    */
   rawValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
@@ -94,7 +242,7 @@ export class ObjectValue {
    *
    * @param {string} key
    * @return {?string}
-   * @throws {OffsetError, TypeError}
+   * @throws {IndexError, TypeError}
    */
   stringValue(key) {
     const val = this.rawValue(key)
@@ -133,7 +281,7 @@ export class ObjectValue {
    *
    * @param {string} key
    * @return {?number}
-   * @throws {OffsetError, TypeError}
+   * @throws {IndexError, TypeError}
    */
   numberValue(key) {
     const val = this.rawValue(key)
@@ -151,7 +299,7 @@ export class ObjectValue {
    * @return {?number}
    * @throws {TypeError}
    */
-  nbooleanalueOr(key, defaultValue = null) {
+  numberValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
       assertType(
         isNumber(defaultValue) || isNull(defaultValue),
@@ -172,7 +320,7 @@ export class ObjectValue {
    *
    * @param {string} key
    * @return {?boolean}
-   * @throws {OffsetError, TypeError}
+   * @throws {IndexError, TypeError}
    */
   booleanValue(key) {
     const val = this.rawValue(key)
@@ -186,11 +334,11 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @param {?array} [defaultValue=null]
-   * @return {?array}
+   * @param {?boolean} [defaultValue=null]
+   * @return {?boolean}
    * @throws {TypeError}
    */
-  arrayValueOr(key, defaultValue = null) {
+  booleanValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
       assertType(
         isBoolean(defaultValue) || isNull(defaultValue),
@@ -210,14 +358,14 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @return {?Array}
-   * @throws {OffsetError, TypeError}
+   * @return {?ObjectValueArray}
+   * @throws {IndexError, TypeError}
    */
   arrayValue(key) {
     const val = this.rawValue(key)
     assertType(
-      isStrictArray(val) || isNull(val),
-      this.constructor.name + ': `val` should be array(strict) or null'
+      isArray(val) || isNull(val),
+      this.constructor.name + ': `val` should be array or null'
     )
     return val
   }
@@ -225,22 +373,22 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @param {?Array} [defaultValue=null]
-   * @return {?Array}
+   * @param {?(Array|ObjectValueArray)} [defaultValue=null]
+   * @return {?(Array|ObjectValueArray)}
    * @throws {TypeError}
    */
   arrayValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
       assertType(
-        isStrictArray(defaultValue) || isNull(defaultValue),
-        this.constructor.name + ': `defaultValue` should be array(strict) or null'
+        isArray(defaultValue) || isNull(defaultValue),
+        this.constructor.name + ': `defaultValue` should be array or null'
       )
       return defaultValue
     }
     const val = this[__map].get(key)
     assertType(
-      isStrictArray(val) || isNull(val),
-      this.constructor.name + ': `val` should be array(strict) or null'
+      isArray(val) || isNull(val),
+      this.constructor.name + ': `val` should be array or null'
     )
 
     return val
@@ -250,7 +398,7 @@ export class ObjectValue {
    *
    * @param {string} key
    * @return {?ObjectValue}
-   * @throws {OffsetError, TypeError}
+   * @throws {IndexError, TypeError}
    */
   objectValueValue(key) {
     const val = this.rawValue(key)
@@ -271,7 +419,7 @@ export class ObjectValue {
   objectValueValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
       assertType(
-        val instanceof ObjectValue || isNull(defaultValue),
+        defaultValue instanceof ObjectValue || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be objectValue or null'
       )
       return defaultValue
@@ -295,17 +443,17 @@ export class ObjectValue {
 
   /**
    *
-   * @return {(null | string | number | boolean | Array | ObjectValue)[]}
+   * @return {ObjectValueArray}
    */
   properties() {
-    return this[__map].values()
+    return new ObjectValueArray(...this[__map].values())
   }
 
   /**
    * @return {StringArray}
    */
   propertyNames() {
-    return this[__map].keys()
+    return new globalFlexioImport.io.flexio.flex_types.arrays.StringArray(...this[__map].keys())
   }
 
   /**
@@ -314,27 +462,7 @@ export class ObjectValue {
    * @return {boolean}
    */
   equals(to) {
-    assertType(to instanceof ObjectValue, '`to` should be an instance of ObjectValue')
-
-    if (this == to) {
-      return true
-    }
-
-    if (this.size() !== to.size()) {
-      return false
-    }
-
-    for (const key of this.propertyNames()) {
-      if (this.rawValue(key) instanceof ObjectValue) {
-        if (!to.rawValue(key) instanceof ObjectValue) {
-          return false
-        }
-        return this.rawValue(key).equals(to.rawValue(key))
-      } else if (this.rawValue(key) !== to.rawValue(key)) {
-        return false
-      }
-    }
-    return true
+    return objectValueValueEquals(this, to)
   }
 
   /**
@@ -352,21 +480,29 @@ export class ObjectValue {
   toObject() {
     const ret = {}
     this[__map].forEach((v, k) => {
-      ret[k] = (v instanceof ObjectValue) ? v.toObject() : v
+      let out = v
+
+      if (v instanceof ObjectValue || v instanceof globalFlexioImport.io.flexio.flex_types.FlexArray) {
+        out = v.toObject()
+      } else if (isArray(v)) {
+        out = arrayToObject(v)
+      }
+
+      ret[k] = out
     })
     return ret
   }
 
   /**
    *
-   * @return {{key:string, value:(null | string | number | boolean | Array | ObjectValue)}[]}
+   * @return {{key:string, value:ObjectValueValue}[]}
    */
   toArray() {
     const ret = []
     this[__map].forEach((v, k) => {
       ret.push({
         key: k,
-        value: (v instanceof ObjectValue) ? v.toArray() : v
+        value: v
       })
     })
     return ret
@@ -484,6 +620,7 @@ export class ObjectValueBuilder {
       map instanceof ObjectValueFlexMap,
       this.constructor.name + ': `map` should be ObjectValueFlexMap'
     )
+
     this[__map] = map
     return this
   }
@@ -536,15 +673,20 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {Array} value
+   * @param {(Array|ObjectValueArray)} value
    * @return {ObjectValueBuilder}
    */
   arrayValue(key, value) {
     assertType(
-      isString(key) && (isNull(value) || isStrictArray(value)),
+      isString(key) && (isNull(value) || isArray(value)),
       this.constructor.name + ': `key` should be string, `value` should be null or Array(strict)'
     )
-    this[__map].set(key, value)
+
+    if (value instanceof ObjectValueArray) {
+      this[__map].set(key, value)
+    } else {
+      this[__map].set(key, new ObjectValueArray(...value))
+    }
     return this
   }
 
@@ -566,7 +708,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {(null | string | number | boolean | Array | ObjectValue)} value
+   * @param {ObjectValueValue} value
    * @return {ObjectValueBuilder}
    */
   value(key, value) {
@@ -595,12 +737,7 @@ export class ObjectValueBuilder {
     for (const key in jsonObject) {
       if (jsonObject.hasOwnProperty(key)) {
         if (isObject(jsonObject[key])) {
-          builder.objectValueValue(
-            key,
-            ObjectValueBuilder.fromObject(jsonObject[key]).build()
-          )
-        } else {
-          builder.value(key, jsonObject[key])
+          builder.value(key, valueFromItem(jsonObject[key]))
         }
       }
     }
@@ -633,7 +770,7 @@ export class ObjectValueBuilder {
 }
 
 /**
- * @extends {FlexMap<(null | string | number | boolean | Array | ObjectValue)>}
+ * @extends {FlexMap<ObjectValueValue>}
  */
 class ObjectValueFlexMap extends FlexMap {
   /**
@@ -643,22 +780,29 @@ class ObjectValueFlexMap extends FlexMap {
    * @throws Error
    */
   _validate(v) {
-    if (isArray(v)) {
-      new ObjectValueArray(...v)
-    } else {
-
-      assertType(
-        isJsonSpec(v),
-        this.constructor.name + ': `v` should be null or string or number or boolean or Array or ObjectValue'
-      )
-    }
+    validateObjectValueValue(v)
   }
 }
 
 /**
- * @extends {FlexArray<(null | string | number | boolean | Array | ObjectValue)>}
+ * @extends {FlexArray<ObjectValueValue>}
  */
 class ObjectValueArray extends FlexArray {
+
+  constructor(...args) {
+    super()
+    for (const v of args) {
+
+      if (isArray(v) && !(v instanceof ObjectValueArray)) {
+
+        this.push(new ObjectValueArray(...v))
+      } else {
+        this.push(v)
+      }
+    }
+
+  }
+
   /**
    *
    * @param {*} v
@@ -666,13 +810,19 @@ class ObjectValueArray extends FlexArray {
    * @throws Error
    */
   _validate(v) {
-    if (isArray(v)) {
-      new ObjectValueArray(...v)
-    } else {
-      assertType(
-        isJsonSpec(v),
-        this.constructor.name + ': `v` should be null or string or number or boolean or Array or ObjectValue'
-      )
-    }
+    validateObjectValueValue(v)
+  }
+
+  /**
+   *
+   * @return {Array<ObjectValueValue>}
+   */
+  toObject() {
+    return this.mapToArray((v, k) => {
+      if (v instanceof ObjectValue || v instanceof globalFlexioImport.io.flexio.flex_types.FlexArray) {
+        return v.toObject()
+      }
+      return v
+    })
   }
 }
