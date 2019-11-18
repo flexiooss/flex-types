@@ -748,9 +748,7 @@ export class ObjectValueBuilder {
     let builder = new ObjectValueBuilder()
     for (const key in jsonObject) {
       if (jsonObject.hasOwnProperty(key)) {
-        if (isObject(jsonObject[key])) {
-          builder.value(key, valueFromItem(jsonObject[key]))
-        }
+        builder.value(key, valueFromItem(jsonObject[key]))
       }
     }
     return builder

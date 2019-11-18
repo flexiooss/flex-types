@@ -60,8 +60,8 @@ export class TestObjectValue extends TestCase {
     assert.deepStrictEqual(ob2.arrayValue('primitiveArray').toArray(), ['tutu', true, null, 12], 'arrayValue')
     assert.deepStrictEqual(ob2.arrayValueOr('badKey', ['bad', 'bad', 12]), ['bad', 'bad', 12], 'arrayValueOr')
 
-    assert.deepStrictEqual(ob2.objectValueValue('object'), ob, 'objectValueValue')
-    assert.deepStrictEqual(ob2.objectValueValueOr('badKey', ob3), ob3, 'objectValueValueOr')
+    assert.deepStrictEqual(ob2.objectValueValue('object').toObject(), ob.toObject(), 'objectValueValue')
+    assert.deepStrictEqual(ob2.objectValueValueOr('badKey', ob3).toObject(), ob3.toObject(), 'objectValueValueOr')
   }
 
   testBuilder() {
@@ -88,11 +88,11 @@ export class TestObjectValue extends TestCase {
       .objectValueValue('object', ob)
       .build()
 
-    assert.deepStrictEqual(ob2, globalFlexioImport.io.flexio.flex_types.ObjectValue.from(ob2).build(), 'ObjectValue.from')
+    assert.ok(ob2.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue.from(ob2).build()), 'ObjectValue.from')
 
-    assert.deepStrictEqual(ob2, globalFlexioImport.io.flexio.flex_types.ObjectValue.fromObject(ob2.toObject()).build(), 'ObjectValue.fromObject')
+    assert.ok(ob2.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue.fromObject(ob2.toObject()).build()), 'ObjectValue.fromObject')
 
-    assert.deepStrictEqual(ob2, globalFlexioImport.io.flexio.flex_types.ObjectValue.fromJson(JSON.stringify(ob2.toJSON())).build(), 'ObjectValue.fromJson')
+    assert.ok(ob2.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue.fromJson(JSON.stringify(ob2.toJSON())).build()), 'ObjectValue.fromJson')
 
     assert.ok(JSON.stringify(ob2.toJSON()) === '{"string":"toto","bool":true,"number":12,"array":["tutu",false,12,{"string":"toto","bool":true,"number":12,"array":["tutu",true,12]},["tutu",true,12]],"object":{"string":"toto","bool":true,"number":12,"array":["tutu",true,12]}}', 'toJSON')
 
@@ -277,14 +277,15 @@ export class TestObjectValue extends TestCase {
     const ob3 = ob2.withBooleanValue('bool', false)
 
     assert.ok(ob3.rawValue('bool') === false, 'get')
-    assert.deepStrictEqual(ob3, globalFlexioImport.io.flexio.flex_types.ObjectValue
+    assert.ok(ob3.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue
       .builder()
       .stringValue('string', 'toto')
       .booleanValue('bool', false)
       .numberValue('number', 12)
       .arrayValue('array', ['tutu', false, 12, ob, ['tutu', true, 12]])
       .objectValueValue('object', ob)
-      .build(), 'compare instance')
+      .build()
+    ), 'compare instance')
 
     const ob4 = ob2.withBooleanValue('bool', true)
     assert.ok(ob2 !== ob4, 'immutability : not same instance')
