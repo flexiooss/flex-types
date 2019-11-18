@@ -104,6 +104,7 @@ const objectValueValuePropertyEquals = (to, compare) => {
   if (compare === to) {
     return true
   }
+
   if (to instanceof ObjectValue) {
     if (!compare instanceof ObjectValue) {
       return false
@@ -112,10 +113,7 @@ const objectValueValuePropertyEquals = (to, compare) => {
     return to.equals(compare)
 
   } else if (isArray(to)) {
-    if (!isArray(compare) || !objectValueValueArrayEquals(to, compare)) {
-      return false
-    }
-
+    return isArray(compare) && objectValueValueArrayEquals(to, compare)
   }
 
   return false
@@ -128,7 +126,8 @@ const objectValueValuePropertyEquals = (to, compare) => {
  * @return {boolean}
  */
 const objectValueValueArrayEquals = (to, compare) => {
-  assertType(isArray(to) && isArray(ObjectValue), '`to` & `compare` should be an Array')
+
+  assertType(isArray(to) && isArray(compare), '`to` & `compare` should be an Array')
   if (compare == to) {
     return true
   }

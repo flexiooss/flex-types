@@ -166,37 +166,58 @@ export class TestObjectValue extends TestCase {
         ), 5
     )
 
-    // assert.ok(
-    //   !globalFlexioImport.io.flexio.flex_types.ObjectValue
-    //     .builder()
-    //     .stringValue('string', 'toto')
-    //     .booleanValue('bool', true)
-    //     .numberValue('number', 12)
-    //     .arrayValue('array', ['tutu', true, 12])
-    //     .build()
-    //     .equals(
-    //       globalFlexioImport.io.flexio.flex_types.ObjectValue
-    //         .builder()
-    //         .stringValue('string', 'toto')
-    //         .booleanValue('bool', true)
-    //         .numberValue('number', 12)
-    //         .arrayValue('array', ['tuta', true, 12])
-    //         .build()
-    //     ), 6
-    // )
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue
+            .builder()
+            .stringValue('string', 'toto')
+            .booleanValue('bool', true)
+            .numberValue('number', 12)
+            .arrayValue('array', ['tuta', true, 12])
+            .build()
+        ), 6
+    )
 
-    // assert.ok(
-    //   !globalFlexioImport.io.flexio.flex_types.ObjectValue
-    //     .builder()
-    //     .stringValue('string', 'toto')
-    //     .booleanValue('bool', true)
-    //     .numberValue('number', 12)
-    //     .arrayValue('array', ['tutu', true, 12])
-    //     .build()
-    //     .equals(
-    //       null
-    //     ), 7
-    // )
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          null
+        ), 7
+    )
+
+    assert.ok(
+      globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+        .objectValueValue(
+          'a',
+          globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+            .arrayValue('b', [1, 2, 3, 'EXPECTED', 5])
+            .build()
+        )
+        .build().equals(
+        globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+          .objectValueValue(
+            'a',
+            globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+              .arrayValue('b', [1, 2, 3, 'EXPECTED', 5])
+              .build()
+          )
+          .build()
+      ),
+      8
+    )
 
   }
 
