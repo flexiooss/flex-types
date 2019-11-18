@@ -250,4 +250,16 @@ export class FlexArray extends Array {
   toJSON() {
     return this.toObject()
   }
+
+  /**
+   *
+   * @param {number} index
+   * @param {TYPE} value
+   * @return {Array<TYPE>}
+   */
+  with(index, value) {
+    const ret = new this.constructor(...this)
+    ret.set(index, value)
+    return ret
+  }
 }
