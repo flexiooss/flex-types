@@ -219,6 +219,35 @@ export class TestObjectValue extends TestCase {
       8
     )
 
+    assert.ok(!
+        globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+          .objectValueValue(
+            'a',
+            globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+              .objectValueValue('b',
+                globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+                  .arrayValue('c', [1, 2, 3])
+                  .build()
+              )
+              .build()
+          )
+          .build().equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+            .objectValueValue(
+              'a',
+              globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+                .arrayValue('b', [1, 2,
+                  globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+                    .arrayValue('c', [1, 2, 'EXPECTED'])
+                    .build()
+                  , 4, 5])
+                .build()
+            )
+            .build()
+        ),
+      9
+    )
+
   }
 
   testWith() {

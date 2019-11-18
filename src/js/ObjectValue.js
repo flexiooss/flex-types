@@ -72,6 +72,7 @@ const isObjectValueValue = a => isNull(a) || isString(a) || isBoolean(a) || isNu
  * @return {boolean}
  */
 const objectValueValueEquals = (to, compare) => {
+
   assertType((to instanceof ObjectValue || isNull(to)) && (compare instanceof ObjectValue || isNull(compare)), '`to` & `compare` should be an instance of ObjectValue or null')
 
   if ((isNull(to) && !isNull(compare)) || (!isNull(to) && isNull(compare))) {
@@ -106,7 +107,7 @@ const objectValueValuePropertyEquals = (to, compare) => {
   }
 
   if (to instanceof ObjectValue) {
-    if (!compare instanceof ObjectValue) {
+    if (!(compare instanceof ObjectValue)) {
       return false
     }
 
