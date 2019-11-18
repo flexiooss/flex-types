@@ -255,7 +255,7 @@ export class FlexArray extends Array {
    *
    * @param {number} index
    * @param {TYPE} value
-   * @return {Array<TYPE>}
+   * @return {FlexArray.<TYPE>}
    */
   with(index, value) {
     const ret = new this.constructor(...this)
