@@ -87,7 +87,7 @@ const objectValueValueEquals = (to, compare) => {
   }
 
   for (const key of compare.propertyNames()) {
-    if (!objectValueValuePropertyEquals(to.rawValue(key), compare.rawValue(key))) {
+    if (!objectValueValuePropertyEquals(to.rawValueOr(key), compare.rawValueOr(key))) {
       return false
     }
   }
@@ -640,7 +640,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {string} value
+   * @param {?string} value
    * @return {ObjectValueBuilder}
    */
   stringValue(key, value) {
@@ -655,7 +655,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {number} value
+   * @param {?number} value
    * @return {ObjectValueBuilder}
    */
   numberValue(key, value) {
@@ -670,7 +670,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {boolean} value
+   * @param {?boolean} value
    * @return {ObjectValueBuilder}
    */
   booleanValue(key, value) {
@@ -685,7 +685,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {(Array|ObjectValueArray)} value
+   * @param {?(Array|ObjectValueArray)} value
    * @return {ObjectValueBuilder}
    */
   arrayValue(key, value) {
@@ -705,7 +705,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {ObjectValue} value
+   * @param {?ObjectValue} value
    * @return {ObjectValueBuilder}
    */
   objectValueValue(key, value) {

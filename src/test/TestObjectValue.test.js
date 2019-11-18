@@ -15,6 +15,7 @@ export class TestObjectValue extends TestCase {
     const ob = globalFlexioImport.io.flexio.flex_types.ObjectValue
       .builder()
       .stringValue('string', 'toto')
+      .stringValue('stringNull', null)
       .booleanValue('bool', true)
       .numberValue('number', 12)
       .arrayValue('array', ['tutu', 'roro', 12])
@@ -45,6 +46,9 @@ export class TestObjectValue extends TestCase {
       .build()
 
     assert.ok(ob.stringValue('string') === 'toto', 'stringValue')
+
+    assert.ok(ob.stringValue('stringNull') === null, 'stringNull')
+
     assert.ok(ob.stringValueOr('BadKey', 'default') === 'default', 'stringValueOr')
 
     assert.ok(ob2.booleanValue('bool') === true, 'booleanValue')
@@ -120,9 +124,79 @@ export class TestObjectValue extends TestCase {
 
     const ob2Bis = globalFlexioImport.io.flexio.flex_types.ObjectValue.from(ob2).build()
 
-    assert.ok(ob2 === ob2, 'strict equality')
-    assert.ok(ob2 !== ob2Bis, 'not strict equality')
-    assert.ok(ob2.equals(ob2Bis), 'equals')
+    assert.ok(ob2 === ob2, 'strict equality', 1)
+    assert.ok(ob2 !== ob2Bis, 'not strict equality', 2)
+    assert.ok(ob2.equals(ob2Bis), 'equals', 3)
+
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue
+            .builder()
+            .stringValue('stringo', 'toto')
+            .booleanValue('boolo', true)
+            .numberValue('numbero', 12)
+            .arrayValue('arrayo', ['tutu', true, 12])
+            .build()
+        ), 4
+    )
+
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue
+            .builder()
+            .stringValue('string', null)
+            .booleanValue('bool', true)
+            .numberValue('number', 12)
+            .arrayValue('array', ['tutu', true, 12])
+            .build()
+        ), 5
+    )
+
+    // assert.ok(
+    //   !globalFlexioImport.io.flexio.flex_types.ObjectValue
+    //     .builder()
+    //     .stringValue('string', 'toto')
+    //     .booleanValue('bool', true)
+    //     .numberValue('number', 12)
+    //     .arrayValue('array', ['tutu', true, 12])
+    //     .build()
+    //     .equals(
+    //       globalFlexioImport.io.flexio.flex_types.ObjectValue
+    //         .builder()
+    //         .stringValue('string', 'toto')
+    //         .booleanValue('bool', true)
+    //         .numberValue('number', 12)
+    //         .arrayValue('array', ['tuta', true, 12])
+    //         .build()
+    //     ), 6
+    // )
+
+    // assert.ok(
+    //   !globalFlexioImport.io.flexio.flex_types.ObjectValue
+    //     .builder()
+    //     .stringValue('string', 'toto')
+    //     .booleanValue('bool', true)
+    //     .numberValue('number', 12)
+    //     .arrayValue('array', ['tutu', true, 12])
+    //     .build()
+    //     .equals(
+    //       null
+    //     ), 7
+    // )
 
   }
 
