@@ -49,7 +49,9 @@ export class TestObjectValue extends TestCase {
 
     assert.ok(ob.stringValue('stringNull') === null, 'stringNull')
 
-    assert.ok(ob.stringValueOr('BadKey', 'default') === 'default', 'stringValueOr')
+    assert.ok(ob.stringValueOr('BadKey', 'default') === 'default', 'stringValueOr with bad key')
+
+    assert.ok(ob.stringValueOr('number', 'default') === 'default', 'stringValueOr with bad type')
 
     assert.ok(ob2.booleanValue('bool') === true, 'booleanValue')
     assert.ok(ob2.booleanValueOr('badKey', false) === false, 'booleanValueOr')

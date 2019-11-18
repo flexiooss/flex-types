@@ -233,6 +233,7 @@ export class ObjectValue {
    */
   rawValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
+      validateObjectValueValue(defaultValue)
       return defaultValue
     }
     return this[__map].get(key)
@@ -261,18 +262,15 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   stringValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+
+    if (!this.has(key) || !(isString(val) || isNull(val))) {
       assertType(
         isString(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be string or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isString(val) || isNull(val),
-      this.constructor.name + ': `val` should be string or null'
-    )
 
     return val
   }
@@ -300,18 +298,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   numberValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(isNumber(val) || isNull(val))) {
       assertType(
         isNumber(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be number or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isNumber(val) || isNull(val),
-      this.constructor.name + ': `val` should be number or null'
-    )
 
     return val
   }
@@ -339,19 +333,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   booleanValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(isBoolean(val) || isNull(val))) {
       assertType(
         isBoolean(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be array or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isBoolean(val) || isNull(val),
-      this.constructor.name + ': `val` should be array or null'
-    )
-
     return val
   }
 
@@ -378,18 +367,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   arrayValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(isArray(val) || isNull(val))) {
       assertType(
         isArray(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be array or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isArray(val) || isNull(val),
-      this.constructor.name + ': `val` should be array or null'
-    )
 
     return val
   }
@@ -417,18 +402,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   objectValueValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(val instanceof ObjectValue || isNull(val))) {
       assertType(
         defaultValue instanceof ObjectValue || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be objectValue or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      val instanceof ObjectValue || isNull(val),
-      this.constructor.name + ': `val` should be objectValue or null'
-    )
 
     return val
   }
