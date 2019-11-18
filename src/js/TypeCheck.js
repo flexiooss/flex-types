@@ -37,6 +37,15 @@ export class TypeCheck {
 
   /**
    *
+   * @param {FlexArray} inst
+   * @return {boolean}
+   */
+  static isFlexArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexArray
+  }
+
+  /**
+   *
    * @param {FlexDate} inst
    * @throws {TypeError}
    */
@@ -46,6 +55,16 @@ export class TypeCheck {
       'TypeCheck: `inst` should be FlexDate'
     )
   }
+
+  /**
+   *
+   * @param {FlexDate} inst
+   * @return {boolean}
+   */
+  static isFlexDate(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexDate
+  }
+
 
   /**
    *
@@ -61,6 +80,15 @@ export class TypeCheck {
 
   /**
    *
+   * @param {FlexDateTime} inst
+   * @return {boolean}
+   */
+  static isFlexDateTime(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexDateTime
+  }
+
+  /**
+   *
    * @param {FlexTime} inst
    * @throws {TypeError}
    */
@@ -70,7 +98,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be FlexTime'
     )
   }
-
+/**
+   *
+   * @param {FlexTime} inst
+   * @return {boolean}
+   */
+  static isFlexTime(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexTime
+  }
   /**
    *
    * @param {FlexZonedDateTime} inst
@@ -82,7 +117,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be FlexZonedDateTime'
     )
   }
-
+/**
+   *
+   * @param {FlexZonedDateTime} inst
+   * @return {boolean}
+   */
+  static isFlexZonedDateTime(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexZonedDateTime
+  }
   /**
    *
    * @param {FlexEnum} inst
@@ -94,7 +136,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be FlexEnum'
     )
   }
-
+/**
+   *
+   * @param {FlexEnum} inst
+   * @return {boolean}
+   */
+  static isFlexEnum(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexEnum
+  }
   /**
    *
    * @param {FlexMap} inst
@@ -106,7 +155,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be FlexMap'
     )
   }
-
+/**
+   *
+   * @param {FlexMap} inst
+   * @return {boolean}
+   */
+  static isFlexMap(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.FlexMap
+  }
   /**
    *
    * @param {StringArray} inst
@@ -118,7 +174,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be StringArray'
     )
   }
-
+/**
+   *
+   * @param {StringArray} inst
+   * @return {boolean}
+   */
+  static isStringArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.StringArray
+  }
   /**
    *
    * @param {BooleanArray} inst
@@ -130,7 +193,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be BooleanArray'
     )
   }
-
+/**
+   *
+   * @param {BooleanArray} inst
+   * @return {boolean}
+   */
+  static isBooleanArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.BooleanArray
+  }
   /**
    *
    * @param {DateArray} inst
@@ -142,7 +212,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be DateArray'
     )
   }
-
+/**
+   *
+   * @param {DateArray} inst
+   * @return {boolean}
+   */
+  static isDateArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.DateArray
+  }
   /**
    *
    * @param {DateTimeArray} inst
@@ -154,7 +231,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be DateArray'
     )
   }
-
+/**
+   *
+   * @param {DateTimeArray} inst
+   * @return {boolean}
+   */
+  static isDateTimeArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.DateTimeArray
+  }
   /**
    *
    * @param {DoubleArray} inst
@@ -166,7 +250,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be DoubleArray'
     )
   }
-
+/**
+   *
+   * @param {DoubleArray} inst
+   * @return {boolean}
+   */
+  static isDoubleArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.DoubleArray
+  }
   /**
    *
    * @param {TzDateTimeArray} inst
@@ -178,7 +269,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be TzDateTimeArray'
     )
   }
-
+/**
+   *
+   * @param {TzDateTimeArray} inst
+   * @return {boolean}
+   */
+  static isTzDateTimeArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.TzDateTimeArray
+  }
   /**
    *
    * @param {TimeArray} inst
@@ -190,7 +288,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be TimeArray'
     )
   }
-
+/**
+   *
+   * @param {TimeArray} inst
+   * @return {boolean}
+   */
+  static isTimeArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.TimeArray
+  }
   /**
    *
    * @param {IntegerArray} inst
@@ -202,7 +307,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be IntegerArray'
     )
   }
-
+/**
+   *
+   * @param {IntegerArray} inst
+   * @return {boolean}
+   */
+  static isIntegerArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.IntegerArray
+  }
   /**
    *
    * @param {ObjectArray} inst
@@ -214,7 +326,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be ObjectArray'
     )
   }
-
+/**
+   *
+   * @param {ObjectArray} inst
+   * @return {boolean}
+   */
+  static isObjectArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.ObjectArray
+  }
   /**
    *
    * @param {FloatArray} inst
@@ -226,7 +345,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be FloatArray'
     )
   }
-
+/**
+   *
+   * @param {FloatArray} inst
+   * @return {boolean}
+   */
+  static isFloatArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.FloatArray
+  }
   /**
    *
    * @param {LongArray} inst
@@ -238,7 +364,14 @@ export class TypeCheck {
       'TypeCheck: `inst` should be LongArray'
     )
   }
-
+/**
+   *
+   * @param {LongArray} inst
+   * @return {boolean}
+   */
+  static isLongArray(inst) {
+    return inst instanceof globalFlexioImport.io.flexio.flex_types.arrays.LongArray
+  }
   /**
    *
    * @param {IndexError} inst

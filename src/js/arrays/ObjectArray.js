@@ -1,5 +1,5 @@
-import { globalFlexioImport } from '@flexio-oss/global-import-registry'
-import { assertType, isObject, isNull } from '@flexio-oss/assert'
+import {globalFlexioImport} from '@flexio-oss/global-import-registry'
+import {assertType, isNull} from '@flexio-oss/assert'
 import {FlexArray} from '../FlexArray'
 
 /**
@@ -8,19 +8,11 @@ import {FlexArray} from '../FlexArray'
 class ObjectArray extends FlexArray {
 
   _validate(element) {
-    if (!isNull( element)) {
-      assertType(isObject(element), 'element should be an object')
+    if (!isNull(element)) {
+      assertType(element instanceof globalFlexioImport.io.flexio.flex_types.ObjectValue, 'element should be an ObjectValue')
     }
   }
 
-  /**
-   *
-   * @return {Array.<?object>}
-   */
-  toArray() {
-    return this.mapToArray(v => JSON.parse(JSON.stringify(v)))
-  }
-
-
 }
-export { ObjectArray }
+
+export {ObjectArray}

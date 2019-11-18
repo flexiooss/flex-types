@@ -75,6 +75,21 @@ export class FlexArray extends Array {
   /**
    *
    * @param {number} offset
+   * @param {TYPE} [defaultValue=null]
+   * @return {TYPE}
+   * @throws {IndexError}
+   */
+  getOr(offset, defaultValue = null) {
+    const ret = this[offset]
+    if (isUndefined(ret)) {
+      return defaultValue
+    }
+    return ret
+  }
+
+  /**
+   *
+   * @param {number} offset
    * @param {TYPE} value
    * @return {FlexArray.<TYPE>}
    */
