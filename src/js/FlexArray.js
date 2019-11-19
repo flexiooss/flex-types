@@ -1,5 +1,6 @@
 import {isFunction, assertType, isUndefined, isNumber} from '@flexio-oss/assert'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
+import {IndexError} from './IndexError'
 
 /**
  * @template TYPE, TYPE_OUT
@@ -90,10 +91,22 @@ export class FlexArray extends Array {
   /**
    *
    * @param {number} offset
+   * @return {boolean}
+   */
+  has(offset) {
+    return offset < this.length
+  }
+
+  /**
+   *
+   * @param {number} offset
    * @param {TYPE} value
    * @return {FlexArray.<TYPE>}
    */
   set(offset, value) {
+    if (offset > this.length) {
+      throw  IndexError.BAD_ARRAY_KEY_GT_LENGTH(offset)
+    }
     this._validate(value)
     this[offset] = value
     return this
@@ -249,5 +262,19 @@ export class FlexArray extends Array {
    */
   toJSON() {
     return this.toObject()
+  }
+
+  /**
+   *
+   * @param {number} index
+   * @param {TYPE} value
+   * @return {Array<TYPE>}
+   */
+  with(index, value) {
+
+    const ret = new this.constructor(...this)
+    ret.set(index, value)
+
+    return ret
   }
 }

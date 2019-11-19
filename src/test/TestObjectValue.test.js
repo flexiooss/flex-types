@@ -15,6 +15,7 @@ export class TestObjectValue extends TestCase {
     const ob = globalFlexioImport.io.flexio.flex_types.ObjectValue
       .builder()
       .stringValue('string', 'toto')
+      .stringValue('stringNull', null)
       .booleanValue('bool', true)
       .numberValue('number', 12)
       .arrayValue('array', ['tutu', 'roro', 12])
@@ -45,7 +46,12 @@ export class TestObjectValue extends TestCase {
       .build()
 
     assert.ok(ob.stringValue('string') === 'toto', 'stringValue')
-    assert.ok(ob.stringValueOr('BadKey', 'default') === 'default', 'stringValueOr')
+
+    assert.ok(ob.stringValue('stringNull') === null, 'stringNull')
+
+    assert.ok(ob.stringValueOr('BadKey', 'default') === 'default', 'stringValueOr with bad key')
+
+    assert.ok(ob.stringValueOr('number', 'default') === 'default', 'stringValueOr with bad type')
 
     assert.ok(ob2.booleanValue('bool') === true, 'booleanValue')
     assert.ok(ob2.booleanValueOr('badKey', false) === false, 'booleanValueOr')
@@ -56,8 +62,8 @@ export class TestObjectValue extends TestCase {
     assert.deepStrictEqual(ob2.arrayValue('primitiveArray').toArray(), ['tutu', true, null, 12], 'arrayValue')
     assert.deepStrictEqual(ob2.arrayValueOr('badKey', ['bad', 'bad', 12]), ['bad', 'bad', 12], 'arrayValueOr')
 
-    assert.deepStrictEqual(ob2.objectValueValue('object'), ob, 'objectValueValue')
-    assert.deepStrictEqual(ob2.objectValueValueOr('badKey', ob3), ob3, 'objectValueValueOr')
+    assert.deepStrictEqual(ob2.objectValueValue('object').toObject(), ob.toObject(), 'objectValueValue')
+    assert.deepStrictEqual(ob2.objectValueValueOr('badKey', ob3).toObject(), ob3.toObject(), 'objectValueValueOr')
   }
 
   testBuilder() {
@@ -84,11 +90,11 @@ export class TestObjectValue extends TestCase {
       .objectValueValue('object', ob)
       .build()
 
-    assert.deepStrictEqual(ob2, globalFlexioImport.io.flexio.flex_types.ObjectValue.from(ob2).build(), 'ObjectValue.from')
+    assert.ok(ob2.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue.from(ob2).build()), 'ObjectValue.from')
 
-    assert.deepStrictEqual(ob2, globalFlexioImport.io.flexio.flex_types.ObjectValue.fromObject(ob2.toObject()).build(), 'ObjectValue.fromObject')
+    assert.ok(ob2.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue.fromObject(ob2.toObject()).build()), 'ObjectValue.fromObject')
 
-    assert.deepStrictEqual(ob2, globalFlexioImport.io.flexio.flex_types.ObjectValue.fromJson(JSON.stringify(ob2.toJSON())).build(), 'ObjectValue.fromJson')
+    assert.ok(ob2.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue.fromJson(JSON.stringify(ob2.toJSON())).build()), 'ObjectValue.fromJson')
 
     assert.ok(JSON.stringify(ob2.toJSON()) === '{"string":"toto","bool":true,"number":12,"array":["tutu",false,12,{"string":"toto","bool":true,"number":12,"array":["tutu",true,12]},["tutu",true,12]],"object":{"string":"toto","bool":true,"number":12,"array":["tutu",true,12]}}', 'toJSON')
 
@@ -120,9 +126,129 @@ export class TestObjectValue extends TestCase {
 
     const ob2Bis = globalFlexioImport.io.flexio.flex_types.ObjectValue.from(ob2).build()
 
-    assert.ok(ob2 === ob2, 'strict equality')
-    assert.ok(ob2 !== ob2Bis, 'not strict equality')
-    assert.ok(ob2.equals(ob2Bis), 'equals')
+    assert.ok(ob2 === ob2, 'strict equality', 1)
+    assert.ok(ob2 !== ob2Bis, 'not strict equality', 2)
+    assert.ok(ob2.equals(ob2Bis), 'equals', 3)
+
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue
+            .builder()
+            .stringValue('stringo', 'toto')
+            .booleanValue('boolo', true)
+            .numberValue('numbero', 12)
+            .arrayValue('arrayo', ['tutu', true, 12])
+            .build()
+        ), 4
+    )
+
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue
+            .builder()
+            .stringValue('string', null)
+            .booleanValue('bool', true)
+            .numberValue('number', 12)
+            .arrayValue('array', ['tutu', true, 12])
+            .build()
+        ), 5
+    )
+
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue
+            .builder()
+            .stringValue('string', 'toto')
+            .booleanValue('bool', true)
+            .numberValue('number', 12)
+            .arrayValue('array', ['tuta', true, 12])
+            .build()
+        ), 6
+    )
+
+    assert.ok(
+      !globalFlexioImport.io.flexio.flex_types.ObjectValue
+        .builder()
+        .stringValue('string', 'toto')
+        .booleanValue('bool', true)
+        .numberValue('number', 12)
+        .arrayValue('array', ['tutu', true, 12])
+        .build()
+        .equals(
+          null
+        ), 7
+    )
+
+    assert.ok(
+      globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+        .objectValueValue(
+          'a',
+          globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+            .arrayValue('b', [1, 2, 3, 'EXPECTED', 5])
+            .build()
+        )
+        .build().equals(
+        globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+          .objectValueValue(
+            'a',
+            globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+              .arrayValue('b', [1, 2, 3, 'EXPECTED', 5])
+              .build()
+          )
+          .build()
+      ),
+      8
+    )
+
+    assert.ok(!
+        globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+          .objectValueValue(
+            'a',
+            globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+              .objectValueValue('b',
+                globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+                  .arrayValue('c', [1, 2, 3])
+                  .build()
+              )
+              .build()
+          )
+          .build().equals(
+          globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+            .objectValueValue(
+              'a',
+              globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+                .arrayValue('b', [1, 2,
+                  globalFlexioImport.io.flexio.flex_types.ObjectValue.builder()
+                    .arrayValue('c', [1, 2, 'EXPECTED'])
+                    .build()
+                  , 4, 5])
+                .build()
+            )
+            .build()
+        ),
+      9
+    )
 
   }
 
@@ -153,14 +279,15 @@ export class TestObjectValue extends TestCase {
     const ob3 = ob2.withBooleanValue('bool', false)
 
     assert.ok(ob3.rawValue('bool') === false, 'get')
-    assert.deepStrictEqual(ob3, globalFlexioImport.io.flexio.flex_types.ObjectValue
+    assert.ok(ob3.equals(globalFlexioImport.io.flexio.flex_types.ObjectValue
       .builder()
       .stringValue('string', 'toto')
       .booleanValue('bool', false)
       .numberValue('number', 12)
       .arrayValue('array', ['tutu', false, 12, ob, ['tutu', true, 12]])
       .objectValueValue('object', ob)
-      .build(), 'compare instance')
+      .build()
+    ), 'compare instance')
 
     const ob4 = ob2.withBooleanValue('bool', true)
     assert.ok(ob2 !== ob4, 'immutability : not same instance')

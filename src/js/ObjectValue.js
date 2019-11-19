@@ -72,6 +72,7 @@ const isObjectValueValue = a => isNull(a) || isString(a) || isBoolean(a) || isNu
  * @return {boolean}
  */
 const objectValueValueEquals = (to, compare) => {
+
   assertType((to instanceof ObjectValue || isNull(to)) && (compare instanceof ObjectValue || isNull(compare)), '`to` & `compare` should be an instance of ObjectValue or null')
 
   if ((isNull(to) && !isNull(compare)) || (!isNull(to) && isNull(compare))) {
@@ -87,7 +88,7 @@ const objectValueValueEquals = (to, compare) => {
   }
 
   for (const key of compare.propertyNames()) {
-    if (!objectValueValuePropertyEquals(to.rawValue(key), compare.rawValue(key))) {
+    if (!objectValueValuePropertyEquals(to.rawValueOr(key), compare.rawValueOr(key))) {
       return false
     }
   }
@@ -104,18 +105,16 @@ const objectValueValuePropertyEquals = (to, compare) => {
   if (compare === to) {
     return true
   }
+
   if (to instanceof ObjectValue) {
-    if (!compare instanceof ObjectValue) {
+    if (!(compare instanceof ObjectValue)) {
       return false
     }
 
     return to.equals(compare)
 
   } else if (isArray(to)) {
-    if (!isArray(compare) || !objectValueValueArrayEquals(to, compare)) {
-      return false
-    }
-
+    return isArray(compare) && objectValueValueArrayEquals(to, compare)
   }
 
   return false
@@ -128,7 +127,8 @@ const objectValueValuePropertyEquals = (to, compare) => {
  * @return {boolean}
  */
 const objectValueValueArrayEquals = (to, compare) => {
-  assertType(isArray(to) && isArray(ObjectValue), '`to` & `compare` should be an Array')
+
+  assertType(isArray(to) && isArray(compare), '`to` & `compare` should be an Array')
   if (compare == to) {
     return true
   }
@@ -220,7 +220,7 @@ export class ObjectValue {
    */
   rawValue(key) {
     if (!this.has(key)) {
-      throw globalFlexioImport.io.flexio.flex_types.IndexError.BAD_ARRAY_KEY(key)
+      throw globalFlexioImport.io.flexio.flex_types.IndexError.BAD_MAP_KEY(key)
     }
     return this[__map].get(key)
   }
@@ -233,6 +233,7 @@ export class ObjectValue {
    */
   rawValueOr(key, defaultValue = null) {
     if (!this.has(key)) {
+      validateObjectValueValue(defaultValue)
       return defaultValue
     }
     return this[__map].get(key)
@@ -261,18 +262,15 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   stringValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+
+    if (!this.has(key) || !(isString(val) || isNull(val))) {
       assertType(
         isString(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be string or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isString(val) || isNull(val),
-      this.constructor.name + ': `val` should be string or null'
-    )
 
     return val
   }
@@ -300,18 +298,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   numberValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(isNumber(val) || isNull(val))) {
       assertType(
         isNumber(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be number or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isNumber(val) || isNull(val),
-      this.constructor.name + ': `val` should be number or null'
-    )
 
     return val
   }
@@ -339,19 +333,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   booleanValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(isBoolean(val) || isNull(val))) {
       assertType(
         isBoolean(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be array or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isBoolean(val) || isNull(val),
-      this.constructor.name + ': `val` should be array or null'
-    )
-
     return val
   }
 
@@ -378,18 +367,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   arrayValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(isArray(val) || isNull(val))) {
       assertType(
         isArray(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be array or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      isArray(val) || isNull(val),
-      this.constructor.name + ': `val` should be array or null'
-    )
 
     return val
   }
@@ -417,18 +402,14 @@ export class ObjectValue {
    * @throws {TypeError}
    */
   objectValueValueOr(key, defaultValue = null) {
-    if (!this.has(key)) {
+    const val = this[__map].get(key)
+    if (!this.has(key) || !(val instanceof ObjectValue || isNull(val))) {
       assertType(
         defaultValue instanceof ObjectValue || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be objectValue or null'
       )
       return defaultValue
     }
-    const val = this[__map].get(key)
-    assertType(
-      val instanceof ObjectValue || isNull(val),
-      this.constructor.name + ': `val` should be objectValue or null'
-    )
 
     return val
   }
@@ -640,7 +621,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {string} value
+   * @param {?string} value
    * @return {ObjectValueBuilder}
    */
   stringValue(key, value) {
@@ -655,7 +636,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {number} value
+   * @param {?number} value
    * @return {ObjectValueBuilder}
    */
   numberValue(key, value) {
@@ -670,7 +651,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {boolean} value
+   * @param {?boolean} value
    * @return {ObjectValueBuilder}
    */
   booleanValue(key, value) {
@@ -685,7 +666,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {(Array|ObjectValueArray)} value
+   * @param {?(Array|ObjectValueArray)} value
    * @return {ObjectValueBuilder}
    */
   arrayValue(key, value) {
@@ -705,7 +686,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {ObjectValue} value
+   * @param {?ObjectValue} value
    * @return {ObjectValueBuilder}
    */
   objectValueValue(key, value) {
@@ -748,9 +729,7 @@ export class ObjectValueBuilder {
     let builder = new ObjectValueBuilder()
     for (const key in jsonObject) {
       if (jsonObject.hasOwnProperty(key)) {
-        if (isObject(jsonObject[key])) {
-          builder.value(key, valueFromItem(jsonObject[key]))
-        }
+        builder.value(key, valueFromItem(jsonObject[key]))
       }
     }
     return builder
