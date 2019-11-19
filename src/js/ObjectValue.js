@@ -220,7 +220,7 @@ export class ObjectValue {
    */
   rawValue(key) {
     if (!this.has(key)) {
-      throw globalFlexioImport.io.flexio.flex_types.IndexError.BAD_ARRAY_KEY(key)
+      throw globalFlexioImport.io.flexio.flex_types.IndexError.BAD_MAP_KEY(key)
     }
     return this[__map].get(key)
   }
