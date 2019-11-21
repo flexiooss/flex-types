@@ -6,7 +6,7 @@ import {FlexArray} from './FlexArray'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 
 /**
- * @typedef {(null | string | number | boolean | ObjectValueValue[]| ObjectValueArray | ObjectValue)} ObjectValueValue
+ * @typedef {(null | string | number | boolean | ObjectValueValue[]| ObjectValueValueArray | ObjectValue)} ObjectValueValue
  */
 
 /**
@@ -44,10 +44,10 @@ const valueFromItem = (value) => {
     }
     return ObjectValueBuilder.fromObject(value).build()
   } else if (isArray(value)) {
-    if (value instanceof ObjectValueArray) {
+    if (value instanceof ObjectValueValueArray) {
       return value
     }
-    let ret = new ObjectValueArray()
+    let ret = new ObjectValueValueArray()
 
     for (const v of value) {
       ret.push(valueFromItem(v))
@@ -63,7 +63,7 @@ const valueFromItem = (value) => {
  * @param {*} a
  * @return {boolean}
  */
-const isObjectValueValue = a => isNull(a) || isString(a) || isBoolean(a) || isNumber(a) || a instanceof ObjectValue || a instanceof ObjectValueArray
+export const isObjectValueValue = a => isNull(a) || isString(a) || isBoolean(a) || isNumber(a) || a instanceof ObjectValue || a instanceof ObjectValueValueArray
 
 /**
  *
@@ -347,7 +347,7 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @return {?ObjectValueArray}
+   * @return {?ObjectValueValueArray}
    * @throws {IndexError, TypeError}
    */
   arrayValue(key) {
@@ -362,8 +362,8 @@ export class ObjectValue {
   /**
    *
    * @param {string} key
-   * @param {?(Array|ObjectValueArray)} [defaultValue=null]
-   * @return {?(Array|ObjectValueArray)}
+   * @param {?(Array|ObjectValueValueArray)} [defaultValue=null]
+   * @return {?(Array|ObjectValueValueArray)}
    * @throws {TypeError}
    */
   arrayValueOr(key, defaultValue = null) {
@@ -373,6 +373,11 @@ export class ObjectValue {
         isArray(defaultValue) || isNull(defaultValue),
         this.constructor.name + ': `defaultValue` should be array or null'
       )
+
+      if (!(defaultValue instanceof ObjectValueValueArray)) {
+        return new ObjectValueValueArray(...defaultValue)
+      }
+
       return defaultValue
     }
 
@@ -424,10 +429,10 @@ export class ObjectValue {
 
   /**
    *
-   * @return {ObjectValueArray}
+   * @return {ObjectValueValueArray}
    */
   properties() {
-    return new ObjectValueArray(...this[__map].values())
+    return new ObjectValueValueArray(...this[__map].values())
   }
 
   /**
@@ -666,7 +671,7 @@ export class ObjectValueBuilder {
   /**
    *
    * @param {string} key
-   * @param {?(Array|ObjectValueArray)} value
+   * @param {?(Array|ObjectValueValueArray)} value
    * @return {ObjectValueBuilder}
    */
   arrayValue(key, value) {
@@ -675,10 +680,10 @@ export class ObjectValueBuilder {
       this.constructor.name + ': `key` should be string, `value` should be null or Array(strict)'
     )
 
-    if (value instanceof ObjectValueArray) {
+    if (value instanceof ObjectValueValueArray) {
       this[__map].set(key, value)
     } else {
-      this[__map].set(key, new ObjectValueArray(...value))
+      this[__map].set(key, new ObjectValueValueArray(...value))
     }
     return this
   }
@@ -709,7 +714,12 @@ export class ObjectValueBuilder {
       isString(key),
       this.constructor.name + ': `key` should be string'
     )
-    this[__map].set(key, value)
+    if (isArray(value)) {
+      this.arrayValue(key, value)
+    } else {
+
+      this[__map].set(key, value)
+    }
     return this
   }
 
@@ -778,15 +788,15 @@ class ObjectValueFlexMap extends FlexMap {
 /**
  * @extends {FlexArray<ObjectValueValue>}
  */
-class ObjectValueArray extends FlexArray {
+export class ObjectValueValueArray extends FlexArray {
 
   constructor(...args) {
     super()
     for (const v of args) {
 
-      if (isArray(v) && !(v instanceof ObjectValueArray)) {
+      if (isArray(v) && !(v instanceof ObjectValueValueArray)) {
 
-        this.push(new ObjectValueArray(...v))
+        this.push(new ObjectValueValueArray(...v))
       } else {
         this.push(v)
       }
