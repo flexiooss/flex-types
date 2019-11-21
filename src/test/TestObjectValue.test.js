@@ -60,7 +60,8 @@ export class TestObjectValue extends TestCase {
     assert.ok(ob2.numberValueOr('badKey', 14) === 14, 'numberValueOr')
 
     assert.deepStrictEqual(ob2.arrayValue('primitiveArray').toArray(), ['tutu', true, null, 12], 'arrayValue')
-    assert.deepStrictEqual(ob2.arrayValueOr('badKey', ['bad', 'bad', 12]), ['bad', 'bad', 12], 'arrayValueOr')
+
+    assert.deepStrictEqual(ob2.arrayValueOr('badKey', ['bad', 'bad', 12]).toArray(), ['bad', 'bad', 12], 'arrayValueOr')
 
     assert.deepStrictEqual(ob2.objectValueValue('object').toObject(), ob.toObject(), 'objectValueValue')
     assert.deepStrictEqual(ob2.objectValueValueOr('badKey', ob3).toObject(), ob3.toObject(), 'objectValueValueOr')
