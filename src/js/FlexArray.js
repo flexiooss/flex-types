@@ -277,4 +277,13 @@ export class FlexArray extends Array {
 
     return ret
   }
+
+  /**
+   *
+   * @param {TYPE} to
+   * @return  {boolean}
+   */
+  equals(to){
+    throw new Error('should be override')
+  }
 }
