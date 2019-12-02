@@ -1,9 +1,11 @@
-import {assert, isNull} from '@flexio-oss/assert'
+import {assert, assertType, isNull} from '@flexio-oss/assert'
+
 
 const datetimePattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z)?$/
 const zonedDatetimePattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z)?([+-](\d{2}):(\d{2}))?$/
 const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/
 const timePattern = /^(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z)?/
+
 
 export class FlexZonedDateTime {
   constructor(dateStr) {
@@ -33,7 +35,23 @@ export class FlexZonedDateTime {
   toString() {
     return this.__zonedDateTime
   }
+
+  /**
+   *
+   * @param {FlexZonedDateTime} to
+   * @return {boolean}
+   */
+  equals(to) {
+    return equals(this, to, (to) => {
+      assertType(
+        to instanceof FlexZonedDateTime,
+        '`to` should be FlexZonedDateTime'
+      )
+    })
+
+  }
 }
+
 
 export class FlexDateTime {
   constructor(dateStr) {
@@ -62,7 +80,23 @@ export class FlexDateTime {
   toString() {
     return this.__dateTime
   }
+
+  /**
+   *
+   * @param {FlexDateTime} to
+   * @return {boolean}
+   */
+  equals(to) {
+    return equals(this, to, (to) => {
+      assertType(
+        to instanceof FlexDateTime,
+        '`to` should be FlexDateTime'
+      )
+    })
+
+  }
 }
+
 
 export class FlexDate {
   constructor(dateStr) {
@@ -89,7 +123,23 @@ export class FlexDate {
   toString() {
     return this.__date
   }
+
+  /**
+   *
+   * @param {FlexDate} to
+   * @return {boolean}
+   */
+  equals(to) {
+    return equals(this, to, (to) => {
+      assertType(
+        to instanceof FlexDate,
+        '`to` should be FlexDate'
+      )
+    })
+
+  }
 }
+
 
 export class FlexTime {
   constructor(dateStr) {
@@ -118,4 +168,40 @@ export class FlexTime {
   toString() {
     return this.__time
   }
+
+  /**
+   *
+   * @param {FlexTime} to
+   * @return {boolean}
+   */
+  equals(to) {
+    return equals(this, to, (to) => {
+      assertType(
+        to instanceof FlexTime,
+        '`to` should be FlexTime'
+      )
+    })
+
+  }
+}
+
+
+/**
+ *
+ * @param from
+ * @param to
+ * @param {function(to)} typeCheck
+ * @return {boolean}
+ */
+const equals = (from, to, typeCheck) => {
+  if (isNull(to)) {
+    return false
+  }
+
+  typeCheck(to)
+
+  if (to == from) {
+    return true
+  }
+  return to.toString() === from.toString()
 }

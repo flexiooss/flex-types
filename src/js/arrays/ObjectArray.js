@@ -1,9 +1,11 @@
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {assertType, isNull} from '@flexio-oss/assert'
 import {FlexArray} from '../FlexArray'
+import {equalsObject} from './Equals'
+
 
 /**
- * @extends {FlexArray<?object>}
+ * @extends {FlexArray.<?ObjectValue>}
  */
 class ObjectArray extends FlexArray {
 
@@ -13,6 +15,22 @@ class ObjectArray extends FlexArray {
     }
   }
 
+  /**
+   *
+   * @param {?ObjectArray} to
+   * @return  {boolean}
+   */
+  equals(to) {
+
+    return equalsObject(this, to, (to) => {
+      assertType(
+        to instanceof ObjectArray,
+        'TypeCheck: `to` should be ObjectArray'
+      )
+    })
+
+  }
 }
+
 
 export {ObjectArray}

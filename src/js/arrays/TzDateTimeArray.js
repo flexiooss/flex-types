@@ -1,6 +1,8 @@
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {assertType, isNull} from '@flexio-oss/assert'
 import {FlexArray} from '../FlexArray'
+import {equalsObject} from './Equals'
+
 
 /**
  * @extends {FlexArray<?FlexZonedDateTime>}
@@ -13,6 +15,21 @@ class TzDateTimeArray extends FlexArray {
     }
   }
 
+  /**
+   *
+   * @param {?TzDateTimeArray} to
+   * @return  {boolean}
+   */
+  equals(to) {
+
+    return equalsObject(this, to, (to) => {
+      assertType(
+        to instanceof TzDateTimeArray,
+        'TypeCheck: `to` should be TzDateTimeArray'
+      )
+    })
+  }
 }
+
 
 export {TzDateTimeArray}

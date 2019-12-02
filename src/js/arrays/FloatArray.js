@@ -17,7 +17,7 @@ class FloatArray extends FlexArray {
   }
   /**
    *
-   * @param {?StringArray} to
+   * @param {?FloatArray} to
    * @return  {boolean}
    */
   equals(to) {

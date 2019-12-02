@@ -3,7 +3,7 @@ import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
 
 /**
- * @template TYPE, TYPE_OUT
+ * @template TYPE
  */
 export class FlexArray extends Array {
   /**
@@ -219,7 +219,7 @@ export class FlexArray extends Array {
   }
 
   /**
-   *
+   * @template TYPE, TYPE_OUT
    * @param {Array<TYPE_OUT>} init
    * @param {function(value: TYPE, index: number, all: this):*} clb
    * @return {Array<TYPE_OUT>}

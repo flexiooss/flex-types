@@ -16,7 +16,7 @@ class DoubleArray extends FlexArray {
   }
   /**
    *
-   * @param {?StringArray} to
+   * @param {?DoubleArray} to
    * @return  {boolean}
    */
   equals(to) {

@@ -16,7 +16,7 @@ class LongArray extends FlexArray {
   }
   /**
    *
-   * @param {?StringArray} to
+   * @param {?LongArray} to
    * @return  {boolean}
    */
   equals(to) {

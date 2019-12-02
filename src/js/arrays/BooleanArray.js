@@ -17,7 +17,7 @@ class BooleanArray extends FlexArray {
 
   /**
    *
-   * @param {?StringArray} to
+   * @param {?BooleanArray} to
    * @return  {boolean}
    */
   equals(to) {

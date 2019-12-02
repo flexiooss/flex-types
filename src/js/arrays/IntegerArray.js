@@ -16,7 +16,7 @@ class IntegerArray extends FlexArray {
   }
   /**
    *
-   * @param {?StringArray} to
+   * @param {?IntegerArray} to
    * @return  {boolean}
    */
   equals(to) {
