@@ -1,3 +1,5 @@
+import {assertType, isArray, TypeCheck} from '@flexio-oss/assert'
+
 const INITIALIZED = Symbol('initialized')
 
 /**
@@ -34,6 +36,9 @@ export class FlexEnum {
    * The values are create by instantiating the current class.
    */
   static initEnum(arg) {
+
+    TypeCheck.assertIsArray(arg)
+
     Object.defineProperty(this, 'enumValues', {
       value: [],
       configurable: false,
@@ -64,8 +69,8 @@ export class FlexEnum {
   }
 
   static _pushEnumValue(enumValue, name) {
-    enumValue.name = name
-    enumValue.ordinal = this.enumValues.length
+    enumValue.__name = name
+    enumValue.__ordinal = this.enumValues.length
     Object.defineProperty(this, name, {
       value: enumValue,
       configurable: false,
@@ -79,7 +84,7 @@ export class FlexEnum {
    * Given the name of an enum constant, return its value.
    */
   static enumValueOf(name) {
-    return this.enumValues.find(x => x.name === name)
+    return this.enumValues.find(x => x.__name === name)
   }
 
   /**
@@ -93,7 +98,31 @@ export class FlexEnum {
    * Default `toString()` method for enum constant.
    */
   toString() {
-    return `${this.constructor.name}.${this.name}`
+    return `${this.constructor.name}.${this.__name}`
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  name() {
+    return this.__name
+  }
+
+  /**
+   *
+   * @returns {number}
+   */
+  ordinal() {
+    return this.__ordinal
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  toJSON(){
+    return this.toString()
   }
 }
 
