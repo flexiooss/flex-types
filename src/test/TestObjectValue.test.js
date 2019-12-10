@@ -4,7 +4,9 @@ import '../../index'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from '../js/IndexError'
 
+
 const assert = require('assert')
+
 
 export class TestObjectValue extends TestCase {
   testBuildAndGet() {
@@ -68,6 +70,14 @@ export class TestObjectValue extends TestCase {
   }
 
   testBuilder() {
+
+    assert.deepStrictEqual(
+      globalFlexioImport.io.flexio.flex_types.ObjectValueBuilder
+        .fromObject({id: '2'})
+        .build().toObject(),
+      {id: '2'},
+      'ObjectValue.fromObject simple')
+
     /**
      * @type {ObjectValue}
      */
@@ -359,5 +369,6 @@ export class TestObjectValue extends TestCase {
   }
 
 }
+
 
 runTest(TestObjectValue)

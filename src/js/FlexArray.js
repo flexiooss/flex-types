@@ -1,9 +1,9 @@
-import {isFunction, assertType, isUndefined, isNumber} from '@flexio-oss/assert'
+import {isFunction, assertType, isUndefined, isNumber, TypeCheck} from '@flexio-oss/assert'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
 
 /**
- * @template TYPE, TYPE_OUT
+ * @template TYPE
  */
 export class FlexArray extends Array {
   /**
@@ -219,7 +219,7 @@ export class FlexArray extends Array {
   }
 
   /**
-   *
+   * @template TYPE, TYPE_OUT
    * @param {Array<TYPE_OUT>} init
    * @param {function(value: TYPE, index: number, all: this):*} clb
    * @return {Array<TYPE_OUT>}
@@ -277,4 +277,114 @@ export class FlexArray extends Array {
 
     return ret
   }
+
+  /**
+   *
+   * @param {TYPE} to
+   * @return  {boolean}
+   */
+  equals(to) {
+    throw new Error('should be override')
+  }
+
+  /**
+   *
+   * @return {FlexArrayBuilder<TYPE, FlexArray.<TYPE>>}
+   */
+  static builder() {
+    return new FlexArrayBuilder().setConstructor(this.constructor)
+  }
+
+  /**
+   *
+   * @return {FlexArrayBuilder<TYPE, FlexArray.<TYPE>>}
+   */
+  static from(instance) {
+    const builder = new FlexArrayBuilder().setConstructor(this.constructor)
+    builder.values(instance)
+    return builder
+  }
+
+  static fromObject(jsonObject) {
+    throw new Error('should be override')
+  }
+
+  static fromJson(json) {
+    throw new Error('should be override')
+  }
+}
+
+
+/**
+ * @template TYPE, ARRAY_TYPE
+ */
+class FlexArrayBuilder {
+  constructor() {
+    /**
+     *
+     * @type {?Class.<ARRAY_TYPE>}
+     * @private
+     */
+    this.__constructor = null
+    /**
+     *
+     * @type {TYPE[]}
+     * @private
+     */
+    this.__values = []
+  }
+
+  /**
+   *
+   * @param {Class.<ARRAY_TYPE>} constructor
+   * @return {FlexArrayBuilder.<TYPE, ARRAY_TYPE>}
+   */
+  setConstructor(constructor) {
+    TypeCheck.assertIsClass(constructor)
+    this.__constructor = constructor
+    return this
+  }
+
+  /**
+   *
+   * @type {TYPE[]}
+   * @return {FlexArrayBuilder.<TYPE, ARRAY_TYPE>}
+   */
+  values(values) {
+    TypeCheck.assertIsArray(values)
+    this.__values = values
+    return this
+  }
+
+  /**
+   * @param {Object} jsonObject
+   * @return {FlexArrayBuilder.<TYPE, ARRAY_TYPE>}
+   */
+  static fromObject(jsonObject) {
+    throw new Error('should be override')
+  }
+
+  /**
+   * @param {string} json
+   * @return {FlexArrayBuilder.<TYPE, ARRAY_TYPE>}
+   */
+  static fromJson(json) {
+    throw new Error('should be override')
+  }
+
+  /**
+   * @param {ARRAY_TYPE} instance
+   * @return {FlexArrayBuilder.<TYPE, ARRAY_TYPE>}
+   */
+  static from(instance) {
+    throw new Error('should be override')
+  }
+
+  /**
+   * @return ARRAY_TYPE
+   */
+  build() {
+    return new this.__constructor(...this.__values)
+  }
+
 }

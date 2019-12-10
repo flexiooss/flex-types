@@ -44,6 +44,29 @@ export class FlexMap extends Map {
    *
    * @param key
    * @param {TYPE} value
+   * @returns {this}
+   */
+  with(key, value) {
+    const inst = new this.constructor(this.entries())
+    inst.set(key, value)
+    return inst
+  }
+
+  /**
+   *
+   * @param key
+   * @returns {this}
+   */
+  without(key) {
+    const inst = new this.constructor(this.entries())
+    inst.delete(key)
+    return inst
+  }
+
+  /**
+   *
+   * @param key
+   * @param {TYPE} value
    * @return {this}
    */
   set(key, value) {
