@@ -1,11 +1,6 @@
 import {isFunction, assertType, isUndefined, isNumber, TypeCheck} from '@flexio-oss/assert'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
-import {
-  AddItemPropertyValue,
-  AddItemPropertyValueBuilder
-} from '../../../component-flexio-resources/generated/io/flexio/component_flexio_resources/actions/AddItemPropertyValue'
-
 
 /**
  * @template TYPE
