@@ -1,5 +1,6 @@
 /**
- * @template TYPE, TYPE_OUT
+ * @template TYPE
+ * @extends Map.<*, TYPE>
  */
 export class FlexMap extends Map {
   /**
@@ -58,9 +59,6 @@ export class FlexMap extends Map {
   toObject() {
     let obj = Object.create(null)
     for (let [k, v] of this) {
-      if (v instanceof FlexMap) {
-        v = v.toObject()
-      }
       obj[k] = v
     }
     return obj

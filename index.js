@@ -1,3 +1,4 @@
+import './generated/io/package'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {deepKeyAssigner} from '@flexio-oss/js-generator-helpers'
 
@@ -19,6 +20,7 @@ import {TimeArray} from './src/js/arrays/TimeArray'
 import {TzDateTimeArray} from './src/js/arrays/TzDateTimeArray'
 import {IndexError} from './src/js/IndexError'
 import {ObjectValue, ObjectValueBuilder, ObjectValueValueArray} from './src/js/ObjectValue'
+
 
 /**
  * @property {FlexArray} globalFlexioImport.io.flexio.flex_types.FlexArray
