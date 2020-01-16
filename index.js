@@ -1,4 +1,3 @@
-import './generated/io/package'
 import './package'
 
 export {FlexEnum} from './src/js/FlexEnum'
