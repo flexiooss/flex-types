@@ -19,6 +19,21 @@ import {TimeArray} from './src/js/arrays/TimeArray'
 import {TzDateTimeArray} from './src/js/arrays/TzDateTimeArray'
 import {IndexError} from './src/js/IndexError'
 import {ObjectValue, ObjectValueBuilder, ObjectValueValueArray} from './src/js/ObjectValue'
+import { Geoloc, GeolocBuilder } from './src/js/Geoloc'
+import { GeolocList } from './src/js/GeolocList'
+
+/**
+ * @property {Geoloc} globalFlexioImport.io.flexio.flex_types.Geoloc
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.Geoloc', Geoloc)
+/**
+ * @property {GeolocList} globalFlexioImport.io.flexio.flex_types.GeolocList
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.GeolocList', GeolocList)
+/**
+ * @property {GeolocBuilder} globalFlexioImport.io.flexio.flex_types.GeolocBuilder
+ */
+deepKeyAssigner(globalFlexioImport, 'io.flexio.flex_types.GeolocBuilder', GeolocBuilder)
 
 
 /**
