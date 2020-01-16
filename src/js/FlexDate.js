@@ -1,8 +1,8 @@
 import {assert, assertType, isNull} from '@flexio-oss/assert'
 
 
-const datetimePattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z)?$/
-const zonedDatetimePattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z)?([+-](\d{2}):(\d{2}))?$/
+const datetimePattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d*))?$/
+const zonedDatetimePattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z|([+-](\d{2}):(\d{2})))$/
 const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/
 const timePattern = /^(\d{2}):(\d{2}):(\d{2})(\.(\d*))?(Z)?/
 
@@ -11,13 +11,12 @@ export class FlexZonedDateTime {
   constructor(dateStr) {
     let found = dateStr.match(zonedDatetimePattern)
     assert(!isNull(found), 'Invalid tz datetime format: ' + dateStr)
-    let arrayDate = dateStr.split('Z')
     /**
      *
      * @type {string}
      * @private
      */
-    this.__zonedDateTime = (found[10] ? arrayDate.join('') : arrayDate[0] + '+00:00')
+    this.__zonedDateTime = dateStr
   }
 
   /**
