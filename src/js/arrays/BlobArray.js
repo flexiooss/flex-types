@@ -5,7 +5,7 @@ import {equalsPrimitive} from './Equals'
 import {TypeCheck} from '../TypeCheck'
 
 /**
- * @extends {FlexArray<?boolean>}
+ * @extends {FlexArray<?Blob>}
  */
 class BlobArray extends FlexArray {
 
