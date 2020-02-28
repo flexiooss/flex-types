@@ -16,6 +16,7 @@ export {ObjectArray} from './src/js/arrays/ObjectArray'
 export {DateTimeArray} from './src/js/arrays/DateTimeArray'
 export {TimeArray} from './src/js/arrays/TimeArray'
 export {TzDateTimeArray} from './src/js/arrays/TzDateTimeArray'
+export {BlobArray} from './src/js/arrays/BlobArray'
 export {IndexError} from './src/js/IndexError'
 export {ObjectValue, ObjectValueBuilder, ObjectValueValueArray} from './src/js/ObjectValue'
 
