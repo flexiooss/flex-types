@@ -286,7 +286,7 @@ export class FlexArray extends Array {
    */
   withPush(...v) {
     const ret = new this.constructor(...this)
-    ret.push(v)
+    ret.push(...v)
     return ret
   }
 
