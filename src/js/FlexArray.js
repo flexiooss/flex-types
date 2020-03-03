@@ -281,12 +281,12 @@ export class FlexArray extends Array {
 
   /**
    *
-   * @param {TYPE} value
+   * @param {...TYPE} v
    * @return {Array<TYPE>}
    */
-  withPush(value) {
+  withPush(...v) {
     const ret = new this.constructor(...this)
-    ret.set(this.length, value)
+    ret.push(v)
     return ret
   }
 
