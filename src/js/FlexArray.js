@@ -2,6 +2,7 @@ import {isFunction, assertType, isUndefined, isNumber, TypeCheck} from '@flexio-
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
 
+
 /**
  * @template TYPE
  */
@@ -275,6 +276,17 @@ export class FlexArray extends Array {
     const ret = new this.constructor(...this)
     ret.set(index, value)
 
+    return ret
+  }
+
+  /**
+   *
+   * @param {TYPE} value
+   * @return {Array<TYPE>}
+   */
+  withPush(value) {
+    const ret = new this.constructor(...this)
+    ret.set(this.length, value)
     return ret
   }
 
