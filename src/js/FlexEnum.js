@@ -1,6 +1,9 @@
 import {assertType, isArray, TypeCheck} from '@flexio-oss/assert'
+import {IndexError} from './IndexError'
+
 
 const INITIALIZED = Symbol('initialized')
+
 
 /**
  * This is an abstract class that is not intended to be
@@ -82,9 +85,14 @@ export class FlexEnum {
 
   /**
    * Given the name of an enum constant, return its value.
+   * @return {this}
    */
   static enumValueOf(name) {
-    return this.enumValues.find(x => x.__name === name)
+    const ret = this.enumValues.find(x => x.__name === name)
+    if (typeof ret === 'undefined') {
+      throw IndexError.BAD_ENUM_NAME(name)
+    }
+    return ret
   }
 
   /**
@@ -121,10 +129,11 @@ export class FlexEnum {
    *
    * @returns {string}
    */
-  toJSON(){
+  toJSON() {
     return this.toString()
   }
 }
+
 
 export function copyProperties(target, source) {
   // Ideally, we’d use Reflect.ownKeys() here,
