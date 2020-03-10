@@ -3,7 +3,9 @@ import {TestCase} from 'code-altimeter-js'
 import {FlexArray} from '../../src/js/FlexArray'
 import {assertType, isBoolean, isNull, isNumber} from '@flexio-oss/assert'
 
+
 const assert = require('assert')
+
 
 class TestArray extends FlexArray {
   _validate(e) {
@@ -13,6 +15,7 @@ class TestArray extends FlexArray {
   }
 }
 
+
 class TestArrayNumber extends FlexArray {
   _validate(e) {
     if (!isNull(e)) {
@@ -20,6 +23,7 @@ class TestArrayNumber extends FlexArray {
     }
   }
 }
+
 
 export class TestFlexArray extends TestCase {
   testEmpty() {
@@ -43,6 +47,32 @@ export class TestFlexArray extends TestCase {
     let res = a.filter((v) => !!v)
     assert.deepStrictEqual(res, new TestArray(true, true))
   }
+
+  testSlice() {
+    let a = new TestArrayNumber(1, 2, 3, 4, 5, 6)
+    assert.deepStrictEqual(
+      a.slice(),
+      new TestArrayNumber(1, 2, 3, 4, 5, 6)
+    )
+    assert.deepStrictEqual(
+      a.slice(2),
+      new TestArrayNumber(3, 4, 5, 6)
+    )
+
+    assert.deepStrictEqual(
+      a.slice(2, 3),
+      new TestArrayNumber(3)
+    )
+
+    assert.deepStrictEqual(
+      a.slice(2, -1),
+      new TestArrayNumber(3, 4, 5)
+    )
+    assert.throws(() => {
+      a.slice(2, 1)
+    })
+  }
 }
+
 
 runTest(TestFlexArray)

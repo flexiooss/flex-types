@@ -1,4 +1,4 @@
-import {isFunction, assertType, isUndefined, isNumber, TypeCheck} from '@flexio-oss/assert'
+import {isFunction, assertType, isUndefined, isNumber, TypeCheck, isNull} from '@flexio-oss/assert'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
 
@@ -144,6 +144,29 @@ export class FlexArray extends Array {
    */
   forEach(callback) {
     return super.forEach(callback)
+  }
+
+  /**
+   *
+   * @param {number} [start=0]
+   * @param {?number} [end=null]
+   * @return {FlexArray.<TYPE>}
+   */
+  slice(start = 0, end = null) {
+    end = (isNull(end))
+      ? this.length
+      : ((end < 0) ? (this.length + end) : end)
+
+    if (end < start) {
+      throw new Error('end should not be less than start')
+    }
+
+    const ret = new this.constructor()
+
+    for (let i = start; i < end; ++i) {
+      ret.push(this.get(i))
+    }
+    return ret
   }
 
   /**
