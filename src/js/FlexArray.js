@@ -1,10 +1,12 @@
 import {isFunction, assertType, isUndefined, isNumber, TypeCheck, isNull} from '@flexio-oss/assert'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
+import {deepFreezeSeal} from '@flexio-oss/js-generator-helpers'
 
 
 /**
  * @template TYPE
+ * @extends Array<TYPE>
  */
 export class FlexArray extends Array {
   /**
@@ -26,6 +28,15 @@ export class FlexArray extends Array {
    */
   _validate(v) {
     throw new TypeError('Should be implemented')
+  }
+
+  /**
+   *
+   * @return {FlexArray<TYPE>}
+   */
+  freeze() {
+    deepFreezeSeal(this)
+    return this
   }
 
   /**

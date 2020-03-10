@@ -72,6 +72,27 @@ export class TestFlexArray extends TestCase {
       a.slice(2, 1)
     })
   }
+
+  testFreeze() {
+
+    const a = new TestArrayNumber(1, 2, 3)
+    a.push(4)
+    a.freeze()
+    assert.throws(() => {
+      a.push(5)
+    })
+
+    assert.throws(() => {
+      a.shift()
+    })
+
+    assert.throws(() => {
+      a.unshift(8)
+    })
+
+    a.find(v => v === 2)
+
+  }
 }
 
 
