@@ -1,9 +1,12 @@
-import {isFunction, assertType, isUndefined, isNumber, TypeCheck} from '@flexio-oss/assert'
+import {isFunction, assertType, isUndefined, isNumber, TypeCheck, isNull} from '@flexio-oss/assert'
 import {globalFlexioImport} from '@flexio-oss/global-import-registry'
 import {IndexError} from './IndexError'
+import {deepFreezeSeal} from '@flexio-oss/js-generator-helpers'
+
 
 /**
  * @template TYPE
+ * @extends Array<TYPE>
  */
 export class FlexArray extends Array {
   /**
@@ -25,6 +28,15 @@ export class FlexArray extends Array {
    */
   _validate(v) {
     throw new TypeError('Should be implemented')
+  }
+
+  /**
+   *
+   * @return {FlexArray<TYPE>}
+   */
+  freeze() {
+    deepFreezeSeal(this)
+    return this
   }
 
   /**
@@ -143,6 +155,29 @@ export class FlexArray extends Array {
    */
   forEach(callback) {
     return super.forEach(callback)
+  }
+
+  /**
+   *
+   * @param {number} [start=0]
+   * @param {?number} [end=null]
+   * @return {FlexArray.<TYPE>}
+   */
+  slice(start = 0, end = null) {
+    end = (isNull(end))
+      ? this.length
+      : ((end < 0) ? (this.length + end) : end)
+
+    if (end < start) {
+      throw new Error('end should not be less than start')
+    }
+
+    const ret = new this.constructor()
+
+    for (let i = start; i < end; ++i) {
+      ret.push(this.get(i))
+    }
+    return ret
   }
 
   /**
@@ -275,6 +310,17 @@ export class FlexArray extends Array {
     const ret = new this.constructor(...this)
     ret.set(index, value)
 
+    return ret
+  }
+
+  /**
+   *
+   * @param {...TYPE} v
+   * @return {Array<TYPE>}
+   */
+  withPush(...v) {
+    const ret = new this.constructor(...this)
+    ret.push(...v)
     return ret
   }
 

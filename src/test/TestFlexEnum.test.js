@@ -1,16 +1,21 @@
 /* global runTest */
 import {FlexEnum} from '../js/FlexEnum'
 import {TestCase} from 'code-altimeter-js'
+import {IndexError} from '../../src/js/IndexError'
+
 
 const assert = require('assert')
+
 
 class TestEnum1 extends FlexEnum {
 
 }
 
+
 class TestEnum2 extends FlexEnum {
 
 }
+
 
 class TestEnum3 extends FlexEnum {
 
@@ -18,7 +23,6 @@ class TestEnum3 extends FlexEnum {
 
 
 class TestFlexEnum extends TestCase {
-
 
   testEmpty() {
     TestEnum1.initEnum([])
@@ -46,7 +50,13 @@ class TestFlexEnum extends TestCase {
     enumValue = TestEnum3.enumValueOf('ate')
     assert.strictEqual(enumValue.name(), 'ate')
     assert.strictEqual(enumValue.ordinal(), 1)
+
+    assert.throws(() => {
+        TestEnum3.enumValueOf('fuckingAbsentValue')
+      },
+      IndexError)
   }
 }
+
 
 runTest(TestFlexEnum)

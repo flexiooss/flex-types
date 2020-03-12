@@ -43,6 +43,15 @@ export class IndexError extends Error {
       .setKey(key)
   }
 
+  /**
+   * @param {string} name
+   * @return {IndexError}
+   */
+  static BAD_ENUM_NAME(name) {
+    return new IndexError('Enum have not this index')
+      .setKey(name)
+  }
+
   toString() {
     return ` ${this.name} --- ${this.message} : ${this.key} `
   }
